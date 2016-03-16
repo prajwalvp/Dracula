@@ -1,6 +1,8 @@
 # phase-connect
 A brute-force pulsar phase connection method
+
 Code written by Paulo Freire
+
 Some minor updates (and these better-than-nothing instructions) by Erik Madsen
 
 ### Instructions (which assume familiarity with TEMPO)
