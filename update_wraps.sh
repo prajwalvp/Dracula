@@ -84,7 +84,6 @@ do
    do
       this_label=`head -$m acc_WRAPs.dat | tail -1 | awk -v cvar="$col" '{print $cvar}'`
       acc_combination="$acc_combination"$this_label" "
-      #eval ${label}=$this_label
       edtim1_str="$edtim1_str""sed 's/PHASE"$label"/PHASE "$this_label"/' | "
       col=`expr $col + 1`
    done
@@ -93,21 +92,9 @@ do
 
    chi2_prev=`head -$m acc_WRAPs.dat | tail -1 | awk -v cvar="$col" '{print $cvar}'`
 
-   #a=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $1}'`
-   #b=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $2}'`
-   #c=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $3}'`
-   #d=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $4}'`
-   #e=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $5}'`
-   #f=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $6}'`
-   #g=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $7}'`
-   #h=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $8}'`
-   #chi2_prev=`head -$m acc_WRAPs.dat | tail -1 | awk '{print $9}'`
-   
-   #acc_combination="$a $b $c $d $e $f $g $h"
-   
    # ********** CHECK variable names and positions, and that the TOA list is accurate
    echo $edtim1_str > edtim1
-   #echo "sed 's/PHASEA/PHASE "$a"/' "$timfile"  | sed 's/PHASEB/PHASE "$b"/' | sed 's/PHASEC/PHASE "$c"/' | sed 's/PHASED/PHASE "$d"/' | sed 's/PHASEE/PHASE "$e"/' | sed 's/PHASEF/PHASE "$f"/' | sed 's/PHASEG/PHASE "$g"/' | sed 's/PHASEH/PHASE "$h"/' | sed 's/PHASEI/PHASE" > edtim1   
+
 
    # Instead of spending most of the time doing stupid calculations with ridiculously large reduced
    # chi2's, we're going to calculate it in three random points and then deduce where the minimum is
