@@ -171,7 +171,7 @@ do
    while [ "$chi" -eq 1 ]
    do	 
    
-         # Make a script for replacing the JUMP flags and run it
+         # Make a script for replacing the PHASE flags and run it
          echo $z"/' > trial.tim " > edtim2 ; paste edtim1 edtim2 -d " " > edtim ; sh edtim
          # Run tempo on this file
          tempo trial.tim -f $ephem -w 
