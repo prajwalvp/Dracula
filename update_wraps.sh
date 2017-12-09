@@ -11,8 +11,8 @@
 # prev_labels="A B C D"
 # next_label="E"
 
-prev_labels="A B"
-next_label="C"
+prev_labels="0 A B C D E F G H I J"
+next_label="K"
 
 ##### (2) Entries that can optionally be updated each time this script is run
 
@@ -23,29 +23,27 @@ chi2_threshold="2.0"
 
 # specify version of TEMPO we're using
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
-TEMPO=
+TEMPO=/homes/pfreire/tempo
 # path to tempo executable
-alias tempo=
+alias tempo=/homes/pfreire/bin/tempo
 
 # specify where we are--this is the directory where we want to write our results
-basedir=
+basedir=/aux/pc20222b/paulo/my_papers/phase_connection/timing
 
 # specify where we want to run this (RAM disk, like '/dev/shm/timing/')
-rundir=
+rundir=/dev/shm/timing
 
 # specify the files we are going to work with
 # (.par and .tim file names--these files should be in your basedir)
-ephem=.par
-timfile=.tim
+# DON'T name it "trial.tim"
+ephem=47TucAA_initial.par
+timfile=TOA.tim
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
-
-
-
 # copy them and file with acceptable phase wraps to rundir
 
-cp $ephem $timfile  acc_WRAPs.dat $rundir
+cp -r $ephem $timfile acc_WRAPs.dat $rundir
 
 # remove previous WRAPs file
 
@@ -67,8 +65,8 @@ m=1
 
 # Arbitrary positions we're sampling
 
-z1=-20
-z2=20
+z1=-5
+z2=5
 
 # set total counter
 l=0
@@ -141,7 +139,7 @@ do
 	 l=`expr $l + 1`
 	 
    # write this in the file	 
-   echo $chi2_0 $chi2_1 $chi2_2 $min $chi2 >> minima.dat
+   echo "Loop" $m "of" $n ":" $chi2_0 $chi2_1 $chi2_2 $min $chi2 >> minima.dat
 	  
    # **************** Do cycle going up in phase count
   
@@ -185,7 +183,7 @@ do
    done
  
    m=`expr $m + 1`
-   echo "Done $m of $n loops." > progress.dat
+
 done
 
 # write results to disk
