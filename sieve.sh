@@ -11,8 +11,8 @@
 # prev_labels="A B C D"
 # next_label="E"
 
-prev_labels="0 A B C D E F G H I J"
-next_label="K"
+prev_labels="0"
+next_label="A"
 
 ##### (2) Entries that can optionally be updated each time this script is run
 
