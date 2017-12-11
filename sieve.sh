@@ -23,19 +23,20 @@ chi2_threshold="2.0"
 
 # specify version of TEMPO we're using
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
-TEMPO=/homes/pfreire/tempo
+TEMPO=
 # path to tempo executable
-alias tempo=/homes/pfreire/bin/tempo
+alias tempo=
 
 # specify where we are--this is the directory where we want to write our results
-basedir=/aux/pc20222b/paulo/my_papers/phase_connection/timing
+basedir=
 
 # specify where we want to run this (RAM disk, like '/dev/shm/timing/')
-rundir=/dev/shm/timing
+rundir=/dev/shm/
 
 # specify the files we are going to work with
 # (.par and .tim file names--these files should be in your basedir)
 # DON'T name it "trial.tim"
+# Examples given of TOA file and initial ephemeris are given in this repository
 ephem=47TucAA_initial.par
 timfile=TOA.tim
 
