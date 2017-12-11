@@ -15,17 +15,23 @@ Epochs can be joined together by removing JUMPs from the timfile. Try doing this
 
 Once you reach a gap where multiple PHASE wraps seem to give acceptable fits, you have an ambiguous gap: you cannot proceed with manual connection. Then you need to use the sieve.sh script.
 
-Run the initialize.sh script. Then write "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it. 
+Write "PHASE0" anywhere in your TOA list, and "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it.
 
-Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with "previous labels = 0" and "next label = A". Run the script. This will find all the acceptable integers for the gap labelled with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations.
+Make the first version of the file containing the acceptable solutions, in this case containing a single ascii number, 0. This will be applied to the PHASE0 tag (this is just a consequence of the fact that sieve.sh needs a non-empty "previous labels" environment variable). 
 
-Sort this on the chi2 column into file called acc_WRAPs.dat (replacing the previous file with such name). The command for this is "sort -nk 3 WRAPs.dat > acc_WRAPs.dat". Delete all lines below which chi2 is unacceptably large. This cutoff is up to you, but 2 is a good choice.
+Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations.
 
-Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting the JUMPs around it. Then edit sieve.sh, with previous labels being "0 A" and "next_label = B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. When sript is done, repeat sorting: "sort -nk 4 WRAPs.dat > acc_WRAPs.dat" (4, not 3). Delete all lines below which chi2 is unacceptably large.
+Re-name the previous acc_WRAPs.dat to something like acc_WRAPs_0.dat.
 
-This is an iterative process. For your third run, prev_labels should be "0 A B" and next_label should be "C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D").
+Then sort this on the chi2 column into a new version of acc_WRAPs.dat:
+ > sort -nk 3 WRAPs.dat > acc_WRAPs.dat
+Edit acc_WRAPs.dat and delete all lines below which the reduced chi2 is unacceptably large. This cutoff is up to you, but 2 is a good choice.
 
-You might find that early on you have relatively few 'acceptable' solutions and that this balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
+Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. When sript is done, repeat sorting: "sort -nk 4 WRAPs.dat > acc_WRAPs.dat" (4, not 3, since the WRAPs.dat file now has more columns, one extra for the integers that yield acceptable solutions for gap B). Delete all lines below which chi2 is unacceptably large.
+
+This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D"). Also, the column in WRAPs.dat where the relevant chi2s are stored increases one unit at a time.
+
+You might find that early on you have relatively few 'acceptable' solutions might balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
 
 You might also find that somewhere along the way you need to start fitting an additional parameter in order to keep getting any acceptable solutions. That's simply an edit of your starting parfile.
 
