@@ -8,8 +8,10 @@
 
 # example for one step:
 
-# prev_labels="A B C D"
-# next_label="E"
+# Edit these values to match last iteration of sieve.sh. In this case, the nex-label of sieve.sh is ''J''.
+# Here ``J'' is added to ``previous labels''.
+# Also, please add a label called PHASE1 to your TOA list.
+# Finally, please sort the acceptable WRAPs.dat file from your last interation into a new acc_WRAPs.dat.
 
 prev_labels="0 A B C D E F G H I J"
 next_label="1"
@@ -21,22 +23,24 @@ next_label="1"
 
 # specify version of TEMPO we're using
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
-TEMPO=/homes/pfreire/tempo
+TEMPO=
 # path to tempo executable
-alias tempo=/homes/pfreire/bin/tempo
+alias tempo=
 
 # specify where we are--this is the directory where we want to write our results
-basedir=/aux/pc20222b/paulo/my_papers/phase_connection/timing
+basedir=
 
 # specify the files we are going to work with
 # (.par and .tim file names--these files should be in your basedir)
+# Example files given in this repository.
+
 ephem=47TucAA_initial.par
 fitephem=J0024-7205AA.par
 timfile=TOA.tim
 
-#make a new .tim file without any PHASE statements
+#make a new .tim file without any PHASE statements AND without any JUMP statements
    
-cat $timfile | grep -v PHASE > trial2.tim
+cat $timfile | grep -v PHASE | grep -v JUMP > trial2.tim
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
