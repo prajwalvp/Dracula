@@ -1,11 +1,12 @@
 # phase-connect
-A brute-force pulsar phase connection method
+A pulsar phase connection method
 
 Code written by Paulo Freire
 
 Some minor updates (and these better-than-nothing instructions) by Erik Madsen
 
 ### Instructions (which assume familiarity with TEMPO)
+
 You should have an initial ephemeris (parfile) and set of TOAs (timfile). Place JUMPs around every epoch except for one. If your initial parfile is reasonable, you should be able to run TEMPO on this and get pretty flat residuals. If necessary, put an EFAC in your timfile such that this step also results in a reduced chi-squared (henceforce "chi2") of ~1.
 
 Epochs can be joined together by removing JUMPs from the timfile. Try doing this between nearby epochs, while inserting a "PHASE N" (where N is some integer number of phase wraps) between them. Some value of N (maybe 0) will hopefully result in a chi2 ~1, and if this is unambiguous, changing N by +/-1 should give a chi2 that is considerably larger than 1. This should vary parabolically--the issue is whether this parabola is narrow enough to be unambiguous. If it is, keep adding more of these PHASE wraps wherever you feel you can do so unambiguously. Once you reach a point where a range of PHASE wraps at some point seem to give acceptable fits, you are ready to move onto using the script.
