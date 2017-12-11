@@ -3,7 +3,7 @@ A pulsar phase connection method
 
 Code written by Paulo Freire
 
-Some minor updates (and these better-than-nothing instructions) by Erik Madsen
+Some minor updates (and these better-than-nothing instructions) by Paulo Freire, based on initial description by Erik Madsen.
 
 ### Instructions (which assume familiarity with TEMPO)
 
