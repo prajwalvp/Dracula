@@ -107,16 +107,4 @@ do
 
 done
 
-# write results to disk
-
-mv minima.dat WRAPs.dat $basedir
-
-end=`date`
-
-echo Made a total of $l trials
-echo Started $start
-echo Ended $end
-
-cd $basedir
-
 exit
