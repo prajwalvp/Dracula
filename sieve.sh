@@ -17,7 +17,7 @@ next_label="A"
 ##### (2) Entries that can optionally be updated each time this script is run
 
 # inner loops continue as long as chi2 is below this value
-chi2_threshold="2.0"
+chi2_threshold="1.47"
 
 ##### (3) Entries that only need to be set at the beginning
 
