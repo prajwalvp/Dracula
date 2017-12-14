@@ -24,7 +24,9 @@ Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile info
 Re-name the previous acc_WRAPs.dat to something like acc_WRAPs_0.dat.
 
 Then sort this on the chi2 column into a new version of acc_WRAPs.dat:
- > sort -nk 3 WRAPs.dat > acc_WRAPs.dat
+
+> sort -nk 3 WRAPs.dat > acc_WRAPs.dat
+ 
 Edit acc_WRAPs.dat and delete all lines below which the reduced chi2 is unacceptably large. This cutoff is up to you, but 2 is a good choice.
 
 Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. When sript is done, repeat sorting: "sort -nk 4 WRAPs.dat > acc_WRAPs.dat" (4, not 3, since the WRAPs.dat file now has more columns, one extra for the integers that yield acceptable solutions for gap B). Delete all lines below which chi2 is unacceptably large.
