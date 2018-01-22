@@ -34,7 +34,7 @@ basedir=
 # (.par and .tim file names--these files should be in your basedir)
 # Example files given in this repository.
 
-ephem=47TucAA_initial.par
+ephem=47Tucaa.par
 fitephem=J0024-7205AA.par
 timfile=TOA.tim
 
