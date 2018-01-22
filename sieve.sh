@@ -208,7 +208,7 @@ cd $basedir
 mv acc_WRAPs.dat acc_WRAPs_$next_label.dat
 
 # make new acc_WRAPs.dat
-sort -nk $r WRAPS.dat > acc_WRAPs.dat
+sort -nk $r WRAPs.dat > acc_WRAPs.dat
 
 exit
 
