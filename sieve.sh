@@ -14,6 +14,11 @@
 prev_labels="0"
 next_label="A"
 
+# count how many columns we have
+
+r=`echo $prev_labels $next_label | wc | awk '{print $2}'`
+r=`expr $r + 1`
+
 ##### (2) Entries that can optionally be updated each time this script is run
 
 # inner loops continue as long as chi2 is below this value
@@ -198,6 +203,12 @@ echo Started $start
 echo Ended $end
 
 cd $basedir
+
+# save previous acc_WRAPs.dat in new file
+mv acc_WRAPs.dat acc_WRAPs_$next_label.dat
+
+# make new acc_WRAPs.dat
+sort -nk $r WRAPS.dat > acc_WRAPs.dat
 
 exit
 
