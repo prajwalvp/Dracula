@@ -19,19 +19,13 @@ Write "PHASE0" anywhere in your TOA list, and "PHASEA" in your TOA list where yo
 
 Make the first version of the file containing the acceptable solutions, in this case containing a single ascii number, 0. This will be applied to the PHASE0 tag (this is just a consequence of the fact that sieve.sh needs a non-empty "previous labels" environment variable). 
 
-Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations.
-
-Re-name the previous acc_WRAPs.dat to something like acc_WRAPs_0.dat.
-
-Then sort this on the chi2 column into a new version of acc_WRAPs.dat:
-
-> sort -nk 3 WRAPs.dat > acc_WRAPs.dat
+Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations. These are then automatically sorted into a new acc_WRAPs.dat file (the old acc_WRAPs.dat file is saved as acc_WRAPs_A.dat).
  
 Edit acc_WRAPs.dat and delete all lines below which the reduced chi2 is unacceptably large. This cutoff is up to you, but 2 is a good choice.
 
-Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. When sript is done, repeat sorting: "sort -nk 4 WRAPs.dat > acc_WRAPs.dat" (4, not 3, since the WRAPs.dat file now has more columns, one extra for the integers that yield acceptable solutions for gap B). Delete all lines below which chi2 is unacceptably large.
+Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. The file acc_WRAPs.dat is updated (the previous one saved). Edit the new acc_WRAPs.dat file, deleting all lines below which chi2 is unacceptably large.
 
-This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D"). Also, the column in WRAPs.dat where the relevant chi2s are stored increases one unit at a time.
+This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D").
 
 You might find that early on you have relatively few 'acceptable' solutions might balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
 
@@ -43,10 +37,13 @@ You might also find that somewhere along the way you need to start fitting an ad
 
 This is the time where you should start looking at your best solutions using the test_wraps.sh script.
 
+This should be setup as the sieve.sh script. It uses the last acc_WRAPs.dat file. The only thing you need to change in the TOA.file is, instead of inserting a new label like PHASEN, insert a PHASE1 label (which is blind).
+
 * There is a lot of manual intervention in this process that you will quickly realize could be automated quite easily. This is not a polished, final product. Feel free to make it more awesome.
 
 * (Erik Madsen): Personally, I'd have written it in Python, but to each their own!
+  (Paulo Freire - will do this soon)
 
 ### Unknown issues
 
-* I really don't have a good sense of what the "right" chi2 cutoff is at any point in this process, especially when faced with tens of thousands of solutions with chi2 ranging from 0.97 to 1.03 and tens of thousands more above that. I didn't keep all my acc_WRAPs.dat files, so I don't know how far down the list the correct solution I finally found was at each step. I suspect it was fairly high in the list, though (among the lowest chi2).
+* I really don't have a good sense of what the "right" chi2 cutoff is at any point in this process, especially when faced with tens of thousands of solutions with chi2 ranging from 0.97 to 1.03 and tens of thousands more above that.
