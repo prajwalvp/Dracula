@@ -42,7 +42,7 @@ rundir=/dev/shm/
 # (.par and .tim file names--these files should be in your basedir)
 # DON'T name it "trial.tim"
 # Examples given of TOA file and initial ephemeris are given in this repository
-ephem=47TucAA_initial.par
+ephem=47Tucaa.par
 timfile=TOA.tim
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
