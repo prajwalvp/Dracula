@@ -13,17 +13,17 @@ If necessary, put an EFAC in your timfile such that this step also results in a 
 
 Epochs can be joined together by removing JUMPs from the timfile. Try doing this between nearby epochs, while inserting a "PHASE N" (where N is some integer number of phase wraps) between them. Some value of N (maybe 0) will hopefully result in a chi2 ~1, and if this value is unique, changing N by +/-1 should give a chi2 that is considerably larger than 1. In this case, you can keep adding more of these PHASE wraps to other gaps bewtween TOAs where you feel you can get a unique (or unambiguous) solution.
 
-Once you reach a gap where multiple PHASE wraps seem to give acceptable fits, you have an ambiguous gap: you cannot proceed with manual connection. Then you need to use the sieve.sh script.
+Once you reach a gap where, for all gaps between connected TOA sets, you have multiple PHASE wraps giving acceptable fits, you have an ambiguous gap: you cannot proceed with manual connection. Then you need to use the sieve.sh script.
 
 Write "PHASE0" anywhere in your TOA list, and "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it.
 
 Make the first version of the file containing the acceptable solutions, in this case containing a single ascii number, 0. This will be applied to the PHASE0 tag (this is just a consequence of the fact that sieve.sh needs a non-empty "previous labels" environment variable). 
 
-Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations. These are then automatically sorted into a new acc_WRAPs.dat file (the old acc_WRAPs.dat file is saved as acc_WRAPs_A.dat).
- 
-Edit acc_WRAPs.dat and delete all lines below which the reduced chi2 is unacceptably large. This cutoff is up to you, but 2 is a good choice.
+Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Also, edit the threshold for an acceptable solution (2.0 is a reasonable number).
 
-Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. The file acc_WRAPs.dat is updated (the previous one saved). Edit the new acc_WRAPs.dat file, deleting all lines below which chi2 is unacceptably large.
+Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations. These are then automatically sorted into a new acc_WRAPs.dat file (the old acc_WRAPs.dat file is saved as acc_WRAPs_A.dat).
+
+Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commenting out the JUMPs around it. Then edit sieve.sh, with prev_labels="0 A" and next_label="B". Run sieve.sh again. Every acceptable combination of PHASEA that was in your acc_WRAPs.dat file will be tested along with a range of PHASEB values. These are determined by finding the minimum of the chi2 parabola in each case. The file acc_WRAPs.dat is updated (the previous one saved).
 
 This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D").
 
