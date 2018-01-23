@@ -172,7 +172,7 @@ do
 	 
 	 # If chi2 is smaller than threshold, write to WRAPs.dat
 	 if [ "$chi" -eq "1" ]; then
-	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+	 echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat;
          else
 	  echo "chi2 too large";
          fi
@@ -199,7 +199,7 @@ do
 	 	 
          # If chi2 is smaller than threshold, write to WRAPs.dat
 	 if [ "$chi" -eq "1" ]; then
-	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+	 echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat;
          else
 	  echo "chi2 too large";
          fi
