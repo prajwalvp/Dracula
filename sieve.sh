@@ -140,7 +140,15 @@ do
          # Run tempo on this file
          tempo trial.tim -f $ephem -w 
          chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat 
+	 # Comparison between two real numbers
+	 chi=`echo $chi2' < '$chi2_threshold | bc -l`
+	 
+	 # If chi2 is smaller than threshold, write to WRAPs.dat
+	 if [ "$chi" -eq "1" ]; then
+	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+         else
+	  echo "chi2 too large";
+         fi
 	 
 	 l=`expr $l + 1`
 	 
@@ -159,9 +167,15 @@ do
          # Run tempo on this file
          tempo trial.tim -f $ephem -w 
          chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	 # comparison between two real numbers
          chi=`echo $chi2' < '$chi2_threshold | bc -l` 
-	  
-         echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat 
+	 
+	 # If chi2 is smaller than threshold, write to WRAPs.dat
+	 if [ "$chi" -eq "1" ]; then
+	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+         else
+	  echo "chi2 too large";
+         fi
 
          l=`expr $l + 1`
          z=`expr $z + 1`
@@ -180,9 +194,15 @@ do
          # Run tempo on this file
          tempo trial.tim -f $ephem -w 
          chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	 # Comparison between two real numbers
          chi=`echo $chi2' < '$chi2_threshold | bc -l`
 	 	 
-         echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat 
+         # If chi2 is smaller than threshold, write to WRAPs.dat
+	 if [ "$chi" -eq "1" ]; then
+	 echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+         else
+	  echo "chi2 too large";
+         fi
 
          l=`expr $l + 1`
          z=`expr $z - 1`
