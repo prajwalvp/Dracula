@@ -228,10 +228,6 @@ mv minima.dat WRAPs.dat $basedir
 
 end=`date`
 
-echo Made a total of $l trials
-echo Started $start
-echo Ended $end
-
 cd $basedir
 
 # save previous acc_WRAPs.dat in new file
@@ -239,6 +235,15 @@ mv acc_WRAPs.dat acc_WRAPs_$next_label.dat
 
 # make new acc_WRAPs.dat
 sort -nk $r WRAPs.dat > acc_WRAPs.dat
+
+p=`wc acc_WRAPs.dat | awk '{print $1}'`
+
+echo Made a total of $l trials
+echo Of those, found $p acceptable solutions
+
+echo Started $start
+echo Ended $end
+
 
 exit
 
