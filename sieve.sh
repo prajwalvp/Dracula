@@ -19,6 +19,15 @@ next_label="A"
 r=`echo $prev_labels $next_label | wc | awk '{print $2}'`
 r=`expr $r + 1`
 
+# If we're starting, make first acc_WRAPs.dat file
+
+if [ "$r" -eq "3" ]; then
+   rm -rf acc_WRAPs.dat;
+   echo 0 > acc_WRAPs.dat;
+else
+   echo "Using acc_WRAPs.dat file from previous iteration";
+fi
+
 ##### (2) Entries that can optionally be updated each time this script is run
 
 # inner loops continue as long as chi2 is below this value
@@ -32,8 +41,9 @@ TEMPO=
 # path to tempo executable
 alias tempo=
 
-# specify where we are--this is the directory where we want to write our results
-basedir=
+# specify where we are--this is the directory where we want to write our results.
+# Default the directory where script is. This directory must contain the ephemeris, TOA list and acc_WRAPs.dat
+basedir=$PWD
 
 # specify where we want to run this (RAM disk, like '/dev/shm/timing/')
 rundir=/dev/shm/
