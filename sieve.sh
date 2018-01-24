@@ -230,11 +230,12 @@ end=`date`
 
 cd $basedir
 
-# save previous acc_WRAPs.dat in new file
-mv acc_WRAPs.dat acc_WRAPs_$next_label.dat
+# remove previous acc_WRAPs.dat - copy is not deleted
+rm -rf acc_WRAPs.dat
 
-# make new acc_WRAPs.dat
+# make new acc_WRAPs.dat, make copy that will stay
 sort -nk $r WRAPs.dat > acc_WRAPs.dat
+cp acc_WRAPs.dat acc_WRAPs_$next_label.dat
 
 p=`wc acc_WRAPs.dat | awk '{print $1}'`
 
