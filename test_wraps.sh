@@ -1,25 +1,16 @@
 #!/bin/sh
 
 
-##### (1) Entries that must be updated each time this script is run
-
-# labels, going A, B, C...
-# (if you are so unfortunate as to reach Z, just use AA, BB, CC, etc.)
-
-# example for one step:
+##### (1) 
 
 # Edit these values to match last iteration of sieve.sh. In this case, the nex-label of sieve.sh is ''J''.
 # Here ``J'' is added to ``previous labels''.
-# Also, please add a label called PHASE1 to your TOA list.
-# Finally, please sort the acceptable WRAPs.dat file from your last interation into a new acc_WRAPs.dat.
+# Finally, please add a label called PHASE1 to your TOA list, in any position.
 
 prev_labels="0 A B C D E F G H I J"
 next_label="1"
 
-##### (2) Entries that can optionally be updated each time this script is run
-
-
-##### (3) Entries that only need to be set at the beginning
+##### (2) Entries that only need to be set at the beginning
 
 # specify version of TEMPO we're using
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
@@ -28,7 +19,7 @@ TEMPO=
 alias tempo=
 
 # specify where we are--this is the directory where we want to write our results
-basedir=
+basedir=$PWD
 
 # specify the files we are going to work with
 # (.par and .tim file names--these files should be in your basedir)
