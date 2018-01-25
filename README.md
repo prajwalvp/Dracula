@@ -11,9 +11,9 @@ You should have an initial ephemeris (parfile) and set of TOAs (timfile). Place 
 
 If necessary, put an EFAC in your timfile such that this step also results in a reduced chi-squared (henceforce "chi2") of ~1.
 
-Epochs can be joined together by removing JUMPs from the timfile. Try doing this between nearby epochs, while inserting a "PHASE N" (where N is some integer number of phase wraps) between them. Some value of N (maybe 0) will hopefully result in a chi2 ~1, and if this value is unique, changing N by +/-1 should give a chi2 that is considerably larger than 1. In this case, you can keep adding more of these PHASE wraps to other gaps bewtween TOAs where you feel you can get a unique (or unambiguous) solution.
+Epochs can be joined together by removing JUMPs from the timfile. Try doing this between nearby epochs, while inserting a "PHASE N" (where N is some integer number of phase wraps) between them. Some value of N (maybe 0) will hopefully result in a chi2 ~1, and if this value is unique, changing N by +/-1 should give a chi2 that is considerably larger than 1. In this case, you have unambiguous solution, i.e., you connected that gap. In this case, you can move to another gap where you feel you can now get a unique (or unambiguous) solution.
 
-Once you reach a gap where, for all gaps between connected TOA sets, you have multiple PHASE wraps giving acceptable fits, you have an ambiguous gap: you cannot proceed with manual connection. Then you need to use the sieve.sh script.
+Once you reach a stage where, for all gaps between connected TOA sets, you have multiple PHASE wraps giving acceptable fits, you have only ambiguous gap: in this case you cannot proceed with manual connection. Then you need to use the sieve.sh script.
 
 Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Also, edit the threshold for an acceptable solution (2.0 is a reasonable number).
 Write "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it.
@@ -24,7 +24,7 @@ Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commentin
 
 This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D").
 
-You might find that early on you have relatively few 'acceptable' solutions might balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
+You might find that early on you have relatively few 'acceptable' solutions might balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2.0 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
 
 You might also find that somewhere along the way you need to start fitting an additional parameter in order to keep getting any acceptable solutions. That's simply an edit of your starting parfile.
 
@@ -34,13 +34,10 @@ You might also find that somewhere along the way you need to start fitting an ad
 
 This is the time where you should start looking at your best solutions using the test_wraps.sh script.
 
-This should be setup as the sieve.sh script. It uses the last acc_WRAPs.dat file. The only thing you need to change in the TOA.file is, instead of inserting a new label like PHASEN, insert a PHASE1 label (which is blind).
+This should be setup as the sieve.sh script. It uses the last acc_WRAPs.dat file.
 
-* There is a lot of manual intervention in this process that you will quickly realize could be automated quite easily. This is not a polished, final product. Feel free to make it more awesome.
+* There is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). This could be automated quite easily. This is not a polished, final product. Feel free to make it more awesome.
 
 * (Erik Madsen): Personally, I'd have written it in Python, but to each their own!
   (Paulo Freire - will do this soon)
 
-### Unknown issues
-
-* I really don't have a good sense of what the "right" chi2 cutoff is at any point in this process, especially when faced with tens of thousands of solutions with chi2 ranging from 0.97 to 1.03 and tens of thousands more above that.
