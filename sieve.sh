@@ -14,11 +14,6 @@
 prev_labels="0"
 next_label="A"
 
-# count how many columns we have
-
-r=`echo $prev_labels $next_label | wc | awk '{print $2}'`
-r=`expr $r + 1`
-
 ##### (2) Entries that can optionally be updated each time this script is run
 
 # inner loops continue as long as chi2 is below this value
@@ -47,6 +42,11 @@ ephem=47Tucaa.par
 timfile=TOA.tim
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
+
+# count how many columns we have
+
+r=`echo $prev_labels $next_label | wc | awk '{print $2}'`
+r=`expr $r + 1`
 
 # If we're starting, make first acc_WRAPs.dat file, and add PHASE0 to TOA file
 
