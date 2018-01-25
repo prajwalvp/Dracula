@@ -19,15 +19,6 @@ next_label="A"
 r=`echo $prev_labels $next_label | wc | awk '{print $2}'`
 r=`expr $r + 1`
 
-# If we're starting, make first acc_WRAPs.dat file
-
-if [ "$r" -eq "3" ]; then
-   rm -rf acc_WRAPs.dat;
-   echo 0 > acc_WRAPs.dat;
-else
-   echo "Using acc_WRAPs.dat file from previous iteration";
-fi
-
 ##### (2) Entries that can optionally be updated each time this script is run
 
 # inner loops continue as long as chi2 is below this value
@@ -55,14 +46,18 @@ rundir=/dev/shm/
 ephem=47Tucaa.par
 timfile=TOA.tim
 
-# If this is the first run, then add PHASE0 statement to TOA file
+##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
+
+# If we're starting, make first acc_WRAPs.dat file, and add PHASE0 to TOA file
 
 if [ "$r" -eq "3" ]; then
+   rm -rf acc_WRAPs.dat;
+   echo 0 > acc_WRAPs.dat;
    echo PHASE0 >> $timfile;
+else
+   echo "Using acc_WRAPs.dat file from previous iteration";
 fi
 
-
-##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # copy them and file with acceptable phase wraps to rundir
 
