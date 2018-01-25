@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 ##### (1) 
 
 # Edit these values to match last iteration of sieve.sh. In this case, the nex-label of sieve.sh is ''J''.
@@ -29,13 +28,14 @@ ephem=47Tucaa.par
 fitephem=J0024-7205AA.par
 timfile=TOA.tim
 
+##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
+
+# Add marker at the end of the file.
+echo PHASE1 >> $timfile
+
 #make a new .tim file without any PHASE statements AND without any JUMP statements
    
 cat $timfile | grep -v PHASE | grep -v JUMP > trial2.tim
-
-##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
-
-# remove previous WRAPs file
 
 start=`date`
 
