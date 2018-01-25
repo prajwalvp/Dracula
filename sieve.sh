@@ -55,6 +55,13 @@ rundir=/dev/shm/
 ephem=47Tucaa.par
 timfile=TOA.tim
 
+# If this is the first run, then add PHASE0 statement to TOA file
+
+if [ "$r" -eq "3" ]; then
+   echo PHASE0 >> $timfile;
+fi
+
+
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # copy them and file with acceptable phase wraps to rundir
