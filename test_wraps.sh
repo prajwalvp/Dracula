@@ -4,7 +4,6 @@
 
 # Edit these values to match last iteration of sieve.sh. In this case, the nex-label of sieve.sh is ''J''.
 # Here ``J'' is added to ``previous labels''.
-# Finally, please add a label called PHASE1 to your TOA list, in any position.
 
 prev_labels="0 A B C D E F G H I J"
 next_label="1"
