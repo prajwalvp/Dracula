@@ -7,7 +7,7 @@ Some minor updates (and these better-than-nothing instructions) by Paulo Freire,
 
 ### Instructions (which assume familiarity with TEMPO)
 
-You should have an initial ephemeris (parfile) and set of TOAs (timfile). Place JUMPs around every epoch (each comprising of a group of TOAs) except for one. If your initial parfile is reasonable, you should be able to run TEMPO on this and get pretty flat residuals. Beware of gropups of TOAs close to rotational phase 0.5, some of those can appear at rotational phase -0.5. In that case TEMPO is assuming the wrong rotation count, whenever it happens it cannot converge on an accurate solution.
+You should have an initial ephemeris (parfile) and set of TOAs (timfile). Place JUMPs around every epoch (each comprising of a group of TOAs) except one. If your initial parfile is reasonable, you should be able to run TEMPO on this and get pretty flat residuals. Beware of gropups of TOAs close to rotational phase 0.5, some of those can appear at rotational phase -0.5. In that case TEMPO is assuming the wrong rotation count, whenever it happens it cannot converge on an accurate solution.
 
 If necessary, put an EFAC in your timfile such that this step also results in a reduced chi-squared (henceforce "chi2") of ~1.
 
@@ -16,7 +16,37 @@ Epochs can be joined together by removing JUMPs from the timfile. Try doing this
 Once you reach a stage where, for all gaps between connected TOA sets, you have multiple PHASE wraps giving acceptable fits, you have only ambiguous gap: in this case you cannot proceed with manual connection. Then you need to use the sieve.sh script.
 
 Edit sieve.sh. First, enter your TEMPO, basedir, rundir, ephem, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Also, edit the threshold for an acceptable solution (2.0 is a reasonable number).
-Write "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it.
+Write "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it, like in this example:
+
+...
+
+JUMP
+
+
+JUMP
+
+7               1390.000 51582.2548632839670   13.657                 0.00000
+
+7               1390.000 51582.3201388983131   25.329                 0.00000
+
+7               1390.000 51582.3850678691313   16.834                 0.00000
+
+C JUMP
+
+PHASEA
+
+C JUMP
+
+7               1390.000 51589.2534739821375   29.849                 0.00000
+
+7               1390.000 51589.3336799053180   28.445                 0.00000
+
+JUMP
+
+
+JUMP
+
+...
 
 Run the script. This will find all the acceptable integers for the gap tagged with PHASEA. These are written in file WRAPs.dat, which that tabulates the chi2 for each of these combinations. These are then automatically sorted into a new acc_WRAPs.dat file (the starting acc_WRAPs.dat file, generated automatically and consisting of a single 0). This acc_WRAPs.dat file is copied to acc_WRAPs_A.dat as a record.
 
