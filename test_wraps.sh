@@ -16,12 +16,16 @@ TEMPO=
 # path to tempo executable
 alias tempo=
 
-# specify where we are--this is the directory where we want to write our results
+#define here tool you use to view residuals
+alias plotres=
+
+# specify where we are--this is the directory where we want to write our results. By default the directory where program is stored
 basedir=$PWD
 
 # specify the files we are going to work with
 # (.par and .tim file names--these files should be in your basedir)
 # Example files given in this repository.
+# fitephem is the name of the post-fit ephemeris. It is given by the name of the pulsar in $ephem, (appears at the top after PSRJ), followed by .par
 
 ephem=47Tucaa.par
 fitephem=J0024-7205AA.par
