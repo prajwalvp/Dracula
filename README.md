@@ -1,7 +1,9 @@
 # DRACULA - Determining the Rotation Count of Pulsars
 A pulsar phase connection method
 
-Code written by Paulo Freire
+Code written by Paulo Freire. 
+
+Paper with description of concepts is now online: https://arxiv.org/abs/1802.07211
 
 Some minor updates (and these better-than-nothing instructions) by Paulo Freire, based on initial description by Erik Madsen.
 
