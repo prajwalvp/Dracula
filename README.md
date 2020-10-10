@@ -82,8 +82,8 @@ Two notes about this:
 - Note that after determining the solution, the script will keep running. This will determine whether the solution is unique or not. If it is not, then that means you need to name more gaps between TOA groups, and restart from scratch.
 
 The script has two disadvantages:
-- a) If the number of allowed solutions grows a lot, your machine might spend a lot of time with the sorting command.
-- b) With sieve.sh, you know at which phase connection you have reached a unique solution. With dracula.sh, you don't know in advance. This is not a big problem, if connecting the whole data set does not get you outside the maximum chi2 threshold.
+a) If the number of allowed solutions grows a lot, your machine might spend a lot of time with the sorting command.
+b) With sieve.sh, you know at which phase connection you have reached a unique solution. With dracula.sh, you don't know in advance. This is not a big problem, if connecting the whole data set does not get you outside the maximum chi2 threshold.
 
 ### Known issues
 
