@@ -78,10 +78,10 @@ b) As noted before, it is automatic, very little manual intervention is needed. 
 c) However, the more important improvement, which is pretty fundamental, is to always prioritize the partial solutions with the lowest chi2, no matter how many gaps they connect. This means that, generally, we get to the timing solution much faster, since the partial solutions with low chi2 are statistically more likely. Indeed, if you run with with 47TucAA.tim and 47TucAA.par, you should see the solution emerge at the 86th tempo call, not after more than 400 tempo calls. This idea was already described in Freire & Ridolfi (2018), the delay in the implementation has to do with the fact that only now did a really simple implementation occur to me.
 
 Two notes about this:
-- You don't need to name all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this.
-- Note that after determining the solution, the script will keep running. This will determine whether the solution is unique or not. If it is not, then that means you need to name more gaps between TOA groups, and restart from scratch.
+a) You don't need to name all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this.
+b) Note that after determining the solution, the script will keep running. This will determine whether the solution is unique or not. If it is not, then that means you need to name more gaps between TOA groups, and restart from scratch.
 
-The script has two disadvantages:
+The script has two disadvantages relative to sieve.sh:
 a) If the number of allowed solutions grows a lot, your machine might spend a lot of time with the sorting command.
 b) With sieve.sh, you know at which phase connection you have reached a unique solution. With dracula.sh, you don't know in advance. This is not a big problem, if connecting the whole data set does not get you outside the maximum chi2 threshold.
 
