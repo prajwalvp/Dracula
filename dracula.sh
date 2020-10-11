@@ -200,8 +200,9 @@ do
 	t=`expr $t + 1`
         chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	# check whether the F1 is negative to more than 2 sigma
-	f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-	
+	# f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
+	# Commented last line out because the test pulsar is in a Globular cluster
+        f=1	
 	# Comparison between two real numbers
 	chi=`echo $chi2' < '$chi2_threshold | bc -l`
 	
@@ -231,8 +232,9 @@ do
 	    t=`expr $t + 1`
             chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	    # check whether the F1 is negative to more than 2 sigma
-	    f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-
+	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
+	    # Commented last line out because the test pulsar is in a Globular cluster
+            f=1
 	    # comparison between two real numbers
             chi=`echo $chi2' < '$chi2_threshold | bc -l` 
 	 
@@ -265,8 +267,10 @@ do
 	    t=`expr $t + 1`
             chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	    # check whether the F1 is negative to more than 2 sigma
-	    f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-
+	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
+	    # Commented last line out because the test pulsar is in a Globular cluster
+            f=1
+	    
 	    # Comparison between two real numbers
             chi=`echo $chi2' < '$chi2_threshold | bc -l`
 
