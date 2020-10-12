@@ -297,7 +297,7 @@ do
 	done
 	
     else
-	# If the gap number $i is the same as the number of gaps, then we have come to the end of the 
+	# If the gap number $i is the same as the number of gaps, then we have reached our objective
 	echo "All gaps have been connected!"
 	sleep 10
 	tempo trial.tim -f $ephem -w
@@ -307,6 +307,8 @@ do
 	cp trial.tim $basedir/solution_$l.tim
 	cp $rephem $basedir/solution_$l.par
 	s=`expr $s + 1`
+	# Note that solution_n.tim runs with $ephem, to produce solution_n.par. The latter ephemeris should run with a version of solution_n.tim where all the PHASE stetements have been commented out.
+	# However, the algorithm will continue, to check for the uniqueness of the solution.
     fi
 
     # re-make acc_WRAPs.dat for next loop, and count the numbers.
