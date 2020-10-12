@@ -34,7 +34,7 @@ chi2_threshold="2.0"
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
 TEMPO=/homes/pfreire/tempo_M2/tempo
 # path to tempo executable
-alias tempo=$TEMPO/tempo_m2
+alias tempo=$TEMPO/tempo
 
 # specify where we are--this is the directory where we want to write our results.
 # Default the directory where script is. This directory must contain the ephemeris, TOA list and acc_WRAPs.dat
@@ -51,10 +51,8 @@ timfile=47TucAA.tim
 # Name the resulting ephemeris (the top of the previous ephem file, plus .par)
 rephem=J0024-7205AA.par
 
-# Check whether acc_WRAPs.dat exists (with result from previous run). If not, uncomment this line
+# Check whether acc_WRAPs.dat exists (with result from previous run). If not, and you're starting from scratch, uncomment this line
 echo "0 0 0" > acc_WRAPs.dat
-
-cp acc_WRAPs.dat $rundir
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
@@ -62,7 +60,7 @@ cp acc_WRAPs.dat $rundir
 
 rm -rf $rundir
 mkdir $rundir
-cp gaps.txt $ephem $timfile $rundir
+cp gaps.txt acc_WRAPs.dat $ephem $timfile $rundir
 
 # go to rundir and start calculation
 
@@ -208,8 +206,10 @@ do
 	chi=`echo $chi2' < '$chi2_threshold | bc -l`
 	
 	# If chi2 is smaller than threshold, write to WRAPs.dat
-	if [ "$chi" -eq "1" ] then
-	    if [ "$f" -eq "1" ] then
+	if [ "$chi" -eq "1" ]
+	then
+	    if [ "$f" -eq "1" ]
+	    then
 		echo $acc_combination $min $chi2 $chi2_prev
 		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 		l=`expr $l + 1`
@@ -218,7 +218,7 @@ do
 		echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
 	    fi
         else
-	    echo "chi2 too large";
+	    echo "chi2 too large"
         fi
 	 	
 	# **************** Do cycle going up in phase count
@@ -240,8 +240,10 @@ do
             chi=`echo $chi2' < '$chi2_threshold | bc -l` 
 	 
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
-	    if [ "$chi" -eq "1" ] then
-		if [ "$f" -eq "1" ] then
+	    if [ "$chi" -eq "1" ]
+	    then
+		if [ "$f" -eq "1" ]
+		then
 		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
@@ -276,8 +278,10 @@ do
             chi=`echo $chi2' < '$chi2_threshold | bc -l`
 
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
-	    if [ "$chi" -eq "1" ] then
-		if [ "$f" -eq "1" ] then
+	    if [ "$chi" -eq "1" ]
+	    then
+		if [ "$f" -eq "1" ]
+		then
 		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
