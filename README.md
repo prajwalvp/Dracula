@@ -72,7 +72,7 @@ Also, using the previous script requires some manual operation.
 
 To do things automatically, you can use instead dracula.sh. To use this, you have to edit the names of all the gaps between groups of TOAs in advance in your .tim file, as I did in file 47TucAA.tim - just write C PHASEA in between a pair of JUMPs. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
 
-After that, list those gaps in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). Then specify if you're starting from scratch, or if you're using an acc_WRAPs.dat file from a previous run (either made with sieve.sh or with dracula.sh - the formats are 100% compatible). If you're continuing work from sieve.sh, please beware of the required format for the dracula timfile, where all JUMPs to which the rotationa numbers refer to are uncommented and all the gap names are commented. Then, finally, make it run!
+After that, list those gaps in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). Then specify if you're starting from scratch, or if you're using an acc_WRAPs.dat file from a previous run (either made with sieve.sh or with dracula.sh - the formats are 100% compatible). If you're continuing work from sieve.sh, please beware of the required format for the dracula timfile, where all JUMPs are uncommented and all the gap names to which the rotation numbers refer to are commented. Then, finally, make it run!
 
 The dracula.sh routine is superior to sieve.sh in several ways:
 - The writing is simpler, more transparent, and overall the script is easier to follow. Part of this is because of the improved logic, and in particular the use of trial.tim as an intermediate file.
@@ -91,7 +91,7 @@ The script has three disadvantages relative to sieve.sh:
 This is not a problem if connecting the whole data set does not get you outside the maximum chi2 threshold. Whether or not that happens is partly related to the next issue.
 - With sieve.sh, you can see when your starting ephemeris might start to become inadequate: all solutions start having high chi2's. In such cases, you need to fit for more parameters that were not necessary in the initial stages (like, e.g., proper motion). With dracula.sh, you have to be pretty sure about the suitability of the set of parameters you're using from the start.
 
-For these reasons, the dracula.sh cript does not entirely supersede sieve.sh - both are useful tools with slightly different applications and advantages.
+For these reasons, the dracula.sh script does not entirely supersede sieve.sh - both are useful tools with slightly different applications and advantages.
 
 ### Known issues
 
