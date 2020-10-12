@@ -51,6 +51,11 @@ timfile=47TucAA.tim
 # Name the resulting ephemeris (the top of the previous ephem file, plus .par)
 rephem=J0024-7205AA.par
 
+# Check whether acc_WRAPs.dat exists (with result from previous run). If not, uncomment this line
+echo "0 0 0" > acc_WRAPs.dat
+
+cp acc_WRAPs.dat $rundir
+
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # remove previous rundir, make new one, copy files there and start calculations there
@@ -64,10 +69,6 @@ cp gaps.txt $ephem $timfile $rundir
 cd $rundir
 
 start=`date`
-
-# We start without an acc_WRAPs.dat! So we will make one
-
-echo "0 0 0" > acc_WRAPs.dat
 
 #
 touch F1_positives.dat
@@ -207,10 +208,10 @@ do
 	chi=`echo $chi2' < '$chi2_threshold | bc -l`
 	
 	# If chi2 is smaller than threshold, write to WRAPs.dat
-	if [ "$chi" -eq "1" ]; then
-	    if [ "$f" -eq "1" ]; then
+	if [ "$chi" -eq "1" ] then
+	    if [ "$f" -eq "1" ] then
 		echo $acc_combination $min $chi2 $chi2_prev
-		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat;
+		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 		l=`expr $l + 1`
 	    else
 		echo "F1 is positive to more than 2 sigma"
@@ -239,8 +240,8 @@ do
             chi=`echo $chi2' < '$chi2_threshold | bc -l` 
 	 
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
-	    if [ "$chi" -eq "1" ]; then
-		if [ "$f" -eq "1" ]; then
+	    if [ "$chi" -eq "1" ] then
+		if [ "$f" -eq "1" ] then
 		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
@@ -249,7 +250,7 @@ do
 		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
 		fi
             else
-		echo "chi2 too large";
+		echo "chi2 too large"
             fi
 	    
             z=`expr $z + 1`
@@ -275,8 +276,8 @@ do
             chi=`echo $chi2' < '$chi2_threshold | bc -l`
 
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
-	    if [ "$chi" -eq "1" ]; then
-		if [ "$f" -eq "1" ]; then
+	    if [ "$chi" -eq "1" ] then
+		if [ "$f" -eq "1" ] then
 		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
@@ -285,7 +286,7 @@ do
 		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
 		fi
             else
-		echo "chi2 too large";
+		echo "chi2 too large"
             fi
 	    
             z=`expr $z - 1`
@@ -298,9 +299,9 @@ do
 	tempo trial.tim -f $ephem -w
 	chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	
-	echo $acc_combination $chi2 > solution_$l.dat
-	cp trial.tim solution_$l.tim
-	cp $rephem solution_$l.par
+	echo $acc_combination $chi2 > $basedir/solution_$l.dat
+	cp trial.tim $basedir/solution_$l.tim
+	cp $rephem $basedir/solution_$l.par
 	s=`expr $s + 1`
     fi
 
@@ -312,10 +313,6 @@ do
 done
 
 end=`date`
-
-# write results to disk
-
-cp solution* $basedir
 
 # cd report on what's been done
 
