@@ -323,8 +323,8 @@ end=`date`
 # cd report on what's been done
 
 echo Made a total of $t trials
-echo Of those, a total of $l unique solutions had reduced chi2s smaller than $chi2_threshold,
-echo  which for that were stored and processed further.
+echo Of those, a total of $l unique partial solutions had reduced chi2s smaller than $chi2_threshold,
+echo  which were stored and processed further.
 echo Found $s solution
 echo Started $start
 echo Ended $end
