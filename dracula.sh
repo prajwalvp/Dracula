@@ -172,19 +172,19 @@ do
 	
 	# ***** Now, calculate the chi2 for PHASE +0
 	sed 's/C '$ex_to_replace'/PHASE 0/g' trial.tim > trial_new.tim
-	tempo trial_new.tim -f $ephem -w
+	tempo trial_new.tim -f $ephem -w > /dev/null
 	t=`expr $t + 1`
 	chi2_0=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	
 	# Do the same for PHASE $z1
 	sed 's/C '$ex_to_replace'/PHASE '$z1'/g' trial.tim > trial_new.tim	
-	tempo trial_new.tim -f $ephem -w 
+	tempo trial_new.tim -f $ephem -w > /dev/null
 	t=`expr $t + 1`
 	chi2_1=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	
 	# Do the same for PHASE $z2
 	sed 's/C '$ex_to_replace'/PHASE '$z2'/g' trial.tim > trial_new.tim	
-	tempo trial_new.tim -f $ephem -w 
+	tempo trial_new.tim -f $ephem -w > /dev/null
 	t=`expr $t + 1`
 	chi2_2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	
@@ -195,7 +195,7 @@ do
 	# Now, let's calculate the chi2 for the best (minimum) phase
 	
 	sed 's/C '$ex_to_replace'/PHASE '$min'/g' trial.tim > trial_new.tim
-        tempo trial_new.tim -f $ephem -w 
+        tempo trial_new.tim -f $ephem -w > /dev/null
 	t=`expr $t + 1`
         chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	# check whether the F1 is negative to more than 2 sigma
@@ -210,7 +210,7 @@ do
 	then
 	    if [ "$f" -eq "1" ]
 	    then
-		echo $acc_combination $min $chi2 $chi2_prev
+		echo it. $l: $acc_combination $min $chi2 $chi2_prev
 		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 		l=`expr $l + 1`
 	    else
@@ -229,7 +229,7 @@ do
 	do
 	    
 	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
-            tempo trial_new.tim -f $ephem -w 
+            tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
             chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	    # check whether the F1 is negative to more than 2 sigma
@@ -244,7 +244,7 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo $acc_combination $z $chi2 $chi2_prev
+		    echo it. $l: $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
 		else
@@ -266,7 +266,7 @@ do
 	do	 
 
 	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
-            tempo trial_new.tim -f $ephem -w
+            tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
             chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	    # check whether the F1 is negative to more than 2 sigma
@@ -282,7 +282,7 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo $acc_combination $z $chi2 $chi2_prev
+		    echo it. $l: $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		    l=`expr $l + 1`
 		else
