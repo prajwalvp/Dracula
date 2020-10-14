@@ -89,6 +89,9 @@ while [ "$n" -gt 0 ]
       # We'll keep doing this until there is only one solution left
 do
 
+    # update the iteration number
+    l=`expr $l + 1`
+
     # ***** First step: read the first line, the one with the lowest chi2
     head -1 acc_WRAPs.dat > line_complete.txt
 
@@ -128,7 +131,7 @@ do
 	phase_number=`awk '{print $'$i'}' line.txt`
 	
 	# For each element in the loop, replace the comented PHASEA statement by an uncommented statement saying PHASE $phase_number
-	echo Replacing C $ex_to_replace with PHASE $phase_number
+	# echo Replacing C $ex_to_replace with PHASE $phase_number
 	
 	sed -i 's/C '$ex_to_replace'/PHASE '$phase_number'/g' trial.tim
 
@@ -164,6 +167,8 @@ do
 
 	line_jump=`expr $line - 2`
 	sed -i $line_jump's/.*/C JUMP/' trial.tim
+
+        echo Iteration $l: starting from solution $acc_combination, with chi2=$chi2_prev   
 
 	# The trial.tim file is ready. This will be the one we will be repeatedly editing over the next few lines.
 	# This will be done into a new file (trial_new.tim), otherwise confusion will reign.
@@ -210,9 +215,8 @@ do
 	then
 	    if [ "$f" -eq "1" ]
 	    then
-		echo it. $l: $acc_combination $min $chi2 $chi2_prev
+		echo $acc_combination $min $chi2 $chi2_prev
 		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
-		l=`expr $l + 1`
 	    else
 		echo "F1 is positive to more than 2 sigma"
 		echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
@@ -244,9 +248,8 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo it. $l: $acc_combination $z $chi2 $chi2_prev
+		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-		    l=`expr $l + 1`
 		else
 		    echo "F1 is positive to more than 2 sigma"
 		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
@@ -282,9 +285,8 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo it. $l: $acc_combination $z $chi2 $chi2_prev
+		    echo $acc_combination $z $chi2 $chi2_prev
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-		    l=`expr $l + 1`
 		else
 		    echo "F1 is positive to more than 2 sigma"
 		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
