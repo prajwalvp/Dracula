@@ -215,7 +215,7 @@ do
 	then
 	    if [ "$f" -eq "1" ]
 	    then
-		echo Sol. $acc_combination $z has chi2 = $chi2
+		echo Sol. $acc_combination _$min_ : chi2 = $chi2
 		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 	    else
 		echo "F1 is positive to more than 2 sigma"
@@ -248,7 +248,7 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo Sol. $acc_combination $z has chi2 = $chi2
+		    echo Sol. $acc_combination _$z_ : chi2 = $chi2
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		else
 		    echo "F1 is positive to more than 2 sigma"
@@ -285,7 +285,7 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo Sol. $acc_combination $z has chi2 = $chi2
+		    echo Sol. $acc_combination _$z_ : chi2 = $chi2
 		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
 		else
 		    echo "F1 is positive to more than 2 sigma"
