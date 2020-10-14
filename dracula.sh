@@ -302,7 +302,7 @@ do
 	# If the gap number $i is the same as the number of gaps, then we have reached our objective
 	echo "All gaps have been connected!"
 	sleep 10
-	tempo trial.tim -f $ephem -w
+	tempo trial.tim -f $ephem -w > /dev/null
 	chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	
 	echo $acc_combination $chi2 > $basedir/solution_$l.dat
