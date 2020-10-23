@@ -6,8 +6,10 @@ Code written by Paulo Freire.
 Paper with description of concepts is now online: https://arxiv.org/abs/1802.07211
 
 Updates and instructions by Paulo Freire, based on initial description by Erik Madsen.
+
 Major update (on Oct. 10. 2020): The automatic version of sieve.sh, dracula.sh !
-Update on Oct. 23: automatic version that does far fewer sorts, saves results of processing in the occasions when it sorts, and e-mails user when it finds a solution.
+
+Update on Oct. 23: new version of dracula.sh that does far fewer sorts when we have longs lists of partial solutions, saves results of processing in the occasions when it sorts, and e-mails user when it finds a solution.
 
 ### Instructions (which assume familiarity with TEMPO)
 
