@@ -7,6 +7,7 @@ Paper with description of concepts is now online: https://arxiv.org/abs/1802.072
 
 Updates and instructions by Paulo Freire, based on initial description by Erik Madsen.
 Major update (on Oct. 10. 2020): The automatic version of sieve.sh, dracula.sh !
+Update on Oct. 23: automatic version that does far fewer sorts, saves results of processing in the occasions when it sorts, and e-mails user when it finds a solution.
 
 ### Instructions (which assume familiarity with TEMPO)
 
@@ -81,21 +82,19 @@ The dracula.sh routine is superior to sieve.sh in several ways:
 
 This idea was already described in Freire & Ridolfi (2018), in the last paragraph of section 4.3, the delay in the implementation has to do with the fact that only now did a really simple implementation occur to me.
 
-Two notes about this:
+Some notes about dracula.sh:
 - You don't need to name all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this.
 - Note that after determining the solution, the script will keep running. This will determine whether the solution is unique or not. If it is not, then that means you need to name more gaps between TOA groups, and restart from scratch.
-
-The script has three disadvantages relative to sieve.sh:
-- If the number of allowed solutions grows a lot, your machine might spend a lot of time with the sorting command.
-- With sieve.sh, you know at which phase connection you have reached a unique solution. With dracula.sh, you don't know that in advance, so by deafult you can name all the gaps in your file, except one (the one that does not have two JUMP statements around it).
+- With sieve.sh, you know at which added gap you have reached a unique solution. With dracula.sh, you don't know that in advance, so by deafult you can name all the gaps in your file, except one (the one that does not have two JUMP statements around it).
 This is not a problem if connecting the whole data set does not get you outside the maximum chi2 threshold. Whether or not that happens is partly related to the next issue.
-- With sieve.sh, you can see when your starting ephemeris might start to become inadequate: all solutions start having high chi2's. In such cases, you need to fit for more parameters that were not necessary in the initial stages (like, e.g., proper motion). With dracula.sh, you have to be pretty sure about the suitability of the set of parameters you're using from the start.
+- With sieve.sh, as you connect more and more gaps, you can see when your initial ephemeris might start to become inadequate: all solutions start having high chi2's. In such cases, you need to fit for more parameters that were not necessary in the initial stages (like, e.g., proper motion). With dracula.sh, you have to be pretty sure about the suitability of the set of parameters you're using from the start.
 
-For these reasons, the dracula.sh script does not entirely supersede sieve.sh - both are useful tools with slightly different applications and advantages.
+Therefore, the dracula.sh script does not entirely supersede sieve.sh - both are useful tools with slightly different applications and advantages.
 
 ### Known issues
 
 * chi2 can start to blow up to the point where tempo.lis just writes it as a bunch of asterisks, and this confuses the parsing of tempo.lis into sticking your directory listing into WRAPs.dat.
+
   This can be edited easily in your tempo source code. Search for the words that appear at the end of the tempo.lis in the code, that tells you which part of the code is writing that file. Then change the precision in the writing of the reduced chi2. 
 
 * For sieve. sh there is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). 
