@@ -53,7 +53,7 @@ rephem=J0024-7205AA.par
 
 
 # Check whether acc_WRAPs.dat exists (with result from previous run). If not, uncomment the first two lines, otherwise the following one
-echo "0 0 0" > acc_WRAPs_new.dat
+echo "0 0 0" > acc_WRAPs.dat
 n=1
 # n=`wc -l < acc_WRAPs.dat`
 
