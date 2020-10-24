@@ -57,6 +57,9 @@ echo "0 0 0" > acc_WRAPs_new.dat
 n=1
 # n=`wc -l < acc_WRAPs.dat`
 
+# Finally, edit your e-mail address, so script can e-mail you the results
+email=pfreire@mpifr-bonn.mpg.de
+
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # remove previous rundir, make new one, copy files there and start calculations there
@@ -349,7 +352,7 @@ do
 
 	    # Let user know a solution has been found
 
-	    echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+	    echo "" | mail -s "Solution found" $email -A $rephem
 	    
 	    s=`expr $s + 1`
 	    
