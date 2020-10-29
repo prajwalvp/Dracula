@@ -249,8 +249,8 @@ do
 		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
 		if [ "$i" -eq "$n_gaps" ]
 		then
-		    echo $acc_combination $min $chi2 > $basedir/solution_$l_$min.dat
-		    cp $rephem $basedir/solution_$l_$min.par
+		    echo $acc_combination $min $chi2 > $basedir/solution_$l.$min.dat
+		    cp $rephem $basedir/solution_$l.$min.par
 		    # Let user know a solution has been found
 		    echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
 		    s=`expr $s + 1`
@@ -296,8 +296,8 @@ do
 		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
 		    if [ "$i" -eq "$n_gaps" ]
 		    then
-			echo $acc_combination $z $chi2 > $basedir/solution_$l_$z.dat
-			cp $rephem $basedir/solution_$l_$z.par
+			echo $acc_combination $z $chi2 > $basedir/solution_$l.$z.dat
+			cp $rephem $basedir/solution_$l.$z.par
 			# Let user know a solution has been found
 			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
 			s=`expr $s + 1`
@@ -345,8 +345,8 @@ do
 		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
 		    if [ "$i" -eq "$n_gaps" ]
 		    then
-			echo $acc_combination $z $chi2 > $basedir/solution_$l_$z.dat
-			cp $rephem $basedir/solution_$l_$z.par
+			echo $acc_combination $z $chi2 > $basedir/solution_$l.$z.dat
+			cp $rephem $basedir/solution_$l.$z.par
 			# Let user know a solution has been found
 			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
 			s=`expr $s + 1`
@@ -402,3 +402,4 @@ echo Started $start
 echo Ended $end
 
 exit
+
