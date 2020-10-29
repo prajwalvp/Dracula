@@ -19,9 +19,9 @@ echo PHASEL >> gaps.txt
 echo PHASEM >> gaps.txt
 
 
-number_gaps=`wc -l < gaps.txt`
+n_gaps=`wc -l < gaps.txt`
 # add 1, because we start counters below at 1*/
-number_gaps=`expr $number_gaps + 1`
+number_gaps=`expr $n_gaps + 1`
 
 ##### (2) Entries that can optionally be updated each time this script is run
 
@@ -56,9 +56,6 @@ rephem=J0024-7205AA.par
 echo "0 0 0" > acc_WRAPs.dat
 n=1
 # n=`wc -l < acc_WRAPs.dat`
-
-# Finally, edit your e-mail address, so script can e-mail you the results
-email=pfreire@mpifr-bonn.mpg.de
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
@@ -186,62 +183,152 @@ do
 	    # Update the counter #
 	    i=`expr $i + 1`	  
 	done
+		    
+	# Now, let's find more gaps for the next phase number. The syntax here is the same as above.
 	
-	# Now, the $i from the previous loop should be smaller than the number of gaps.
-	# If it is smaller, find new solutions.
-	# If it is the same, we have connected all the gaps. Make sure user knows about this.
+	# First, find out which expression is to be replaced 
+	ex_to_replace=`head -$i gaps.txt | tail -1`
 	
-	if [ "$i" -lt "$number_gaps" ]
+	# Second, find out where it appears in trial.tim file
+	line=`sed -n '/'$ex_to_replace'/=' trial.tim`
+	
+	# Now, uncomment the JUMPs around this
+	line_jump=`expr $line + 2`
+	sed -i $line_jump's/.*/C JUMP/' trial.tim
+	
+	line_jump=`expr $line - 2`
+	sed -i $line_jump's/.*/C JUMP/' trial.tim
+	
+	# The trial.tim file is ready. This will be the one we will be repeatedly editing over the next few lines.
+	# This will be done into a new file (trial_new.tim), otherwise confusion will reign.
+	
+	# First, we will test the new gap in 3 points (0, +z, -z). From these three chi2s, we will derive the positions for the best solutions
+	
+	# ***** Now, calculate the chi2 for PHASE +0
+	sed 's/C '$ex_to_replace'/PHASE 0/g' trial.tim > trial_new.tim
+	tempo trial_new.tim -f $ephem -w > /dev/null
+	t=`expr $t + 1`
+	chi2_0=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	
+	# Do the same for PHASE $z1
+	sed 's/C '$ex_to_replace'/PHASE '$z1'/g' trial.tim > trial_new.tim	
+	tempo trial_new.tim -f $ephem -w > /dev/null 
+	t=`expr $t + 1`
+	chi2_1=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	
+	# Do the same for PHASE $z2
+	sed 's/C '$ex_to_replace'/PHASE '$z2'/g' trial.tim > trial_new.tim	
+	tempo trial_new.tim -f $ephem -w > /dev/null
+	t=`expr $t + 1`
+	chi2_2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	
+	# determine position of minimum (this should be reasonably accurate) by estimating minimum of parabola defined by 0, z1, z2
+	
+	min=`echo 'scale=0 ; ( '$z2'^2 *('$chi2_0' - '$chi2_1') + '$z1'^2*(-'$chi2_0' + '$chi2_2')) / (2.*('$z2'*('$chi2_0' - '$chi2_1') + '$z1'*(-'$chi2_0' + '$chi2_2'))) / 1.0 ' | bc -l`
+	
+	# Now, let's calculate the chi2 for the best (minimum) phase
+	
+	sed 's/C '$ex_to_replace'/PHASE '$min'/g' trial.tim > trial_new.tim
+        tempo trial_new.tim -f $ephem -w > /dev/null 
+	t=`expr $t + 1`
+        chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	# check whether the F1 is negative to more than 2 sigma
+	# f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
+	# Line commented out, because we are in a GC
+	f=1
+	
+	# Comparison between two real numbers
+	chi=`echo $chi2' < '$chi2_threshold | bc -l`
+	
+	# If chi2 is smaller than threshold, write to WRAPs.dat
+	if [ "$chi" -eq "1" ]
 	then
+	    if [ "$f" -eq "1" ]
+	    then
+		
+		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+		if [ "$i" -eq "$n_gaps" ]
+		then
+		    echo $acc_combination $min $chi2 > $basedir/solution_$l.dat
+		    cp $rephem $basedir/solution_$l.par
+		    # Let user know a solution has been found
+		    echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+		    s=`expr $s + 1`
+		else
+		    # If number of connections is smaller, then just write solution to WRAPs.dat
+		    echo $acc_combination, $min : chi2 = $chi2
+		    echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
+		fi
+		
+	    else
+		echo "F1 is positive to more than 2 sigma"
+		echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
+	    fi
 	    
-	    # Now, let's find more gaps for the next phase number. The syntax here is the same as above.
+        else
+	    echo "chi2 too large"
+        fi
+	
+	# **************** Do cycle going up in phase count
+	
+	z=`expr $min + 1`
+	chi=1
+	while [ "$chi" -eq 1 ]
+	do
 	    
-	    # First, find out which expression is to be replaced 
-	    ex_to_replace=`head -$i gaps.txt | tail -1`
-	    
-	    # Second, find out where it appears in trial.tim file
-	    line=`sed -n '/'$ex_to_replace'/=' trial.tim`
-	    
-	    # Now, uncomment the JUMPs around this
-	    line_jump=`expr $line + 2`
-	    sed -i $line_jump's/.*/C JUMP/' trial.tim
-	    
-	    line_jump=`expr $line - 2`
-	    sed -i $line_jump's/.*/C JUMP/' trial.tim
-	    
-	    # The trial.tim file is ready. This will be the one we will be repeatedly editing over the next few lines.
-	    # This will be done into a new file (trial_new.tim), otherwise confusion will reign.
-	    
-	    # First, we will test the new gap in 3 points (0, +z, -z). From these three chi2s, we will derive the positions for the best solutions
-	    
-	    # ***** Now, calculate the chi2 for PHASE +0
-	    sed 's/C '$ex_to_replace'/PHASE 0/g' trial.tim > trial_new.tim
+	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
-	    chi2_0=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	    chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	    # check whether the F1 is negative to more than 2 sigma
+	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
+	    # Line commented out, because we are in a GC
+	    f=1
 	    
-	    # Do the same for PHASE $z1
-	    sed 's/C '$ex_to_replace'/PHASE '$z1'/g' trial.tim > trial_new.tim	
-	    tempo trial_new.tim -f $ephem -w > /dev/null 
-	    t=`expr $t + 1`
-	    chi2_1=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	    # comparison between two real numbers
+	    chi=`echo $chi2' < '$chi2_threshold | bc -l` 
 	    
-	    # Do the same for PHASE $z2
-	    sed 's/C '$ex_to_replace'/PHASE '$z2'/g' trial.tim > trial_new.tim	
+	    # If chi2 is smaller than threshold, write to WRAPs.dat
+	    if [ "$chi" -eq "1" ]
+	    then
+		if [ "$f" -eq "1" ]
+		then
+		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+		    if [ "$i" -eq "$n_gaps" ]
+		    then
+			echo $acc_combination $z $chi2 > $basedir/solution_$l.dat
+			cp $rephem $basedir/solution_$l.par
+			# Let user know a solution has been found
+			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+			s=`expr $s + 1`
+		    else
+			# If number of connections is smaller, then just write solution to WRAPs.dat
+			echo $acc_combination, $z : chi2 = $chi2
+			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
+		    fi			
+		    
+		else
+		    echo "F1 is positive to more than 2 sigma"
+		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat;
+		fi
+	    else
+		echo "chi2 too large"
+	    fi
+	    
+	    z=`expr $z + 1`
+	done
+	
+	# **************** Do cycle going down in phase count
+	
+	z=`expr $min - 1`
+	chi=1   
+	while [ "$chi" -eq 1 ]
+	do	 
+	    
+	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
-	    chi2_2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	    
-	    # determine position of minimum (this should be reasonably accurate) by estimating minimum of parabola defined by 0, z1, z2
-	    
-	    min=`echo 'scale=0 ; ( '$z2'^2 *('$chi2_0' - '$chi2_1') + '$z1'^2*(-'$chi2_0' + '$chi2_2')) / (2.*('$z2'*('$chi2_0' - '$chi2_1') + '$z1'*(-'$chi2_0' + '$chi2_2'))) / 1.0 ' | bc -l`
-	    
-	    # Now, let's calculate the chi2 for the best (minimum) phase
-	    
-	    sed 's/C '$ex_to_replace'/PHASE '$min'/g' trial.tim > trial_new.tim
-            tempo trial_new.tim -f $ephem -w > /dev/null 
-	    t=`expr $t + 1`
-            chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
+	    chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
 	    # check whether the F1 is negative to more than 2 sigma
 	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
 	    # Line commented out, because we are in a GC
@@ -255,112 +342,33 @@ do
 	    then
 		if [ "$f" -eq "1" ]
 		then
-		    echo $acc_combination, $min : chi2 = $chi2
-		    echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
+		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+		    if [ "$i" -eq "$n_gaps" ]
+		    then
+			echo $acc_combination $z $chi2 > $basedir/solution_$l.dat
+			cp $rephem $basedir/solution_$l.par
+			# Let user know a solution has been found
+			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+			s=`expr $s + 1`
+		    else
+			# If number of connections is smaller, then just write solution to WRAPs.dat
+			echo $acc_combination, $z : chi2 = $chi2
+			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
+		    fi			
+		    
 		else
 		    echo "F1 is positive to more than 2 sigma"
 		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
 		fi
-            else
+	    else
 		echo "chi2 too large"
-            fi
+	    fi
 	    
-	    # **************** Do cycle going up in phase count
-	    
-	    z=`expr $min + 1`
-	    chi=1
-	    while [ "$chi" -eq 1 ]
-	    do
-		
-		sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
-		tempo trial_new.tim -f $ephem -w > /dev/null
-		t=`expr $t + 1`
-		chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-		# check whether the F1 is negative to more than 2 sigma
-		# f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-	    	# Line commented out, because we are in a GC
-	    	f=1
-		
-		# comparison between two real numbers
-		chi=`echo $chi2' < '$chi2_threshold | bc -l` 
-		
-		# If chi2 is smaller than threshold, write to WRAPs.dat
-		if [ "$chi" -eq "1" ]
-		then
-		    if [ "$f" -eq "1" ]
-		    then
-			echo $acc_combination, $z : chi2 = $chi2
-			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-
-		    else
-			echo "F1 is positive to more than 2 sigma"
-			echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat;
-		    fi
-		else
-		    echo "chi2 too large"
-		fi
-		
-		z=`expr $z + 1`
-	    done
-	    
-	    # **************** Do cycle going down in phase count
-	    
-	    z=`expr $min - 1`
-	    chi=1   
-	    while [ "$chi" -eq 1 ]
-	    do	 
-		
-		sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
-		tempo trial_new.tim -f $ephem -w > /dev/null
-		t=`expr $t + 1`
-		chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-		# check whether the F1 is negative to more than 2 sigma
-		# f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-		# Line commented out, because we are in a GC
-	    	f=1
-
-		# Comparison between two real numbers
-		chi=`echo $chi2' < '$chi2_threshold | bc -l`
-		
-		# If chi2 is smaller than threshold, write to WRAPs.dat
-		if [ "$chi" -eq "1" ]
-		then
-		    if [ "$f" -eq "1" ]
-		    then
-			echo $acc_combination, $z : chi2 = $chi2
-			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-		    else
-			echo "F1 is positive to more than 2 sigma"
-			echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
-		    fi
-		else
-		    echo "chi2 too large"
-		fi
-		
-		z=`expr $z - 1`
-	    done
-	    
-	else
-	    # If the gap number $i is the same as the number of gaps, then we have come to the end of the journey.
-
-	    tempo trial.tim -f $ephem -w > /dev/null
-	    chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	    
-	    echo $acc_combination $chi2 > $basedir/solution_$l.dat
-	    cp trial.tim $basedir/solution_$l.tim
-	    cp $rephem $basedir/solution_$l.par
-
-	    # Let user know a solution has been found
-
-	    echo "" | mail -s "Solution found" $email -A $rephem
-	    
-	    s=`expr $s + 1`
-	    
-	    # However, the algorithm will continue, to check for the uniqueness of the solution.
-	fi
-
-    done
+	    z=`expr $z - 1`
+	done
 	
+    done
+    
     # re-make acc_WRAPs.dat for next k cycle.
     # This is done by sorting on the penultimate column, which has the chi2 from the previous work
 
@@ -372,7 +380,7 @@ do
     # plus the new solutions found during the last loop.
 
     # Let's now save one's work, in case there are problems with the computer
-    if [ "$k" -eq "1000" ]
+    if [ "$k" -gt "10" ]
     then
 	cp acc_WRAPs.dat $basedir
     fi
@@ -394,4 +402,3 @@ echo Started $start
 echo Ended $end
 
 exit
-
