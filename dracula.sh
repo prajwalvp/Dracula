@@ -51,11 +51,9 @@ timfile=47TucAA.tim
 # Name the resulting ephemeris (the top of the previous ephem file, plus .par)
 rephem=J0024-7205AA.par
 
+# To start, you must have a acc_WRAPs.dat. If you don't, that means you're starting from scratch. In that case, just make one containing 3 zeros in a line.
 
-# Check whether acc_WRAPs.dat exists (with result from previous run). If not, uncomment the first two lines, otherwise the following one
-echo "0 0 0" > acc_WRAPs.dat
-n=1
-# n=`wc -l < acc_WRAPs.dat`
+n=`wc -l < acc_WRAPs.dat`
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
