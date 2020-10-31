@@ -62,7 +62,7 @@ n=`wc -l < acc_WRAPs.dat`
 rm -rf $rundir
 mkdir $rundir
 cp gaps.txt $ephem $timfile $rundir
-cp acc_WRAPs.dat $rundir/acc_WRAPs.dat
+cp acc_WRAPs.dat $rundir
 
 
 # go to rundir and start calculation
@@ -87,7 +87,7 @@ z2=5
 
 if [ "$n" -gt 0 ]
       # this is the outer loop, where we cycle through the acceptable solutions.
-      # We'll keep doing this until there is only one solution left
+      # We'll keep doing this until there are no partial solutions left
 then
 
     # Let's now find out how many lines we want to do in a row. 1% of the lines is a good target, I think.
@@ -406,4 +406,3 @@ echo Started $start
 echo Ended $end
 
 exit
-
