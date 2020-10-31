@@ -85,10 +85,10 @@ s=0
 z1=-5
 z2=5
 
-while [ "$n" -gt 0 ]
+if [ "$n" -gt 0 ]
       # this is the outer loop, where we cycle through the acceptable solutions.
       # We'll keep doing this until there is only one solution left
-do
+then
 
     # Let's now find out how many lines we want to do in a row. 1% of the lines is a good target, I think.
     # This will reduce the number of sorts by a factor k. However, it could slightly delay finding the solution.
@@ -386,7 +386,9 @@ do
     # Update n with number of remaining solutions
     
     n=`wc -l < acc_WRAPs.dat`
-done
+else
+    echo "Your file acc_WRAPs.dat is empty"
+fi
 
 end=`date`
 
