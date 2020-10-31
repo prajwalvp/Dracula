@@ -29,8 +29,10 @@ Once you reach a stage where, for all unconnected gaps between (connected) TOA s
 
 ******* First script: sieve.sh *******
 
+This is an earlier, now obsolete version of the phase connecting script. This is mostly here for reference, since this was described and used by Freire & Ridolfi (2018). Also, some of the details are important for understanding how dracula.sh works.
+
 Edit sieve.sh. First, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the file. Then edit with prev_labels ="0" and next_label="A". Also, edit the threshold for an acceptable solution (2.0 is a reasonable number).
-Write "PHASEA" in your TOA list where you have the shortest ambiguous gap, also removing the JUMPs around it, like in this example:
+Write "PHASEA" in your TOA list where you have the shortest ambiguous gap between TOA groups, also removing the JUMPs around it, like in this example:
 
 ...
 
@@ -68,7 +70,7 @@ Now, in the TOA file, include the tag PHASEB in the nest shortest gap, commentin
 
 This is an iterative process. For your third run, prev_labels="0 A B" and next_label="C". With each additional run, these will 'increment' (on the fourht run, they will be " 0 A B C" and "D").
 
-You might find that early on you have relatively few 'acceptable' solutions might balloons out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2.0 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
+You might find that normally early on you have relatively few 'acceptable' solutions, and this might balloon out to thousands upon thousands. That's probably OK. Hopefully after a few rounds (which are of the same order as the number of parameters in your initial solution) the number of solutions will stop growing. If the numbers are millions, you can set the chi2 threshold lower, to (for instance) 1.6 instead of 2.0 just so you don't have to wait all day for this to run, you will suddenly see a sharp decrease in the number of solutions.
 
 You might also find that somewhere along the way you need to start fitting an additional parameter in order to keep getting any acceptable solutions. That's simply an edit of your starting parfile.
 
@@ -77,25 +79,41 @@ You might also find that somewhere along the way you need to start fitting an ad
 Using the previous script is a good idea if the number of possible solutions is a few thousands. If it is millions instead, then you have a problem. 
 Also, using the previous script requires some manual operation. 
 
-To do things automatically, you can use instead dracula.sh. To use this, you have to edit the names of all the gaps between groups of TOAs in advance in your .tim file, as I did in file 47TucAA.tim - just write C PHASEA in between a pair of JUMPs. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
+To do things automatically, you can use instead dracula.sh. To use this, you have to edit the tags of all the gaps between groups of TOAs in advance in your .tim file, or at least a few of them, as I did in file 47TucAA.tim - just write C PHASEA in between a pair of JUMPs. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
 
-After that, list those gaps in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). Then specify if you're starting from scratch, or if you're using an acc_WRAPs.dat file from a previous run (either made with sieve.sh or with dracula.sh - the formats are 100% compatible). If you're continuing work from sieve.sh, please beware of the required format for the dracula timfile, where all JUMPs are uncommented and all the gap names to which the rotation numbers refer to are commented. Then, finally, make it run!
+After that, list those gap tags in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). Then specify if you're starting from scratch, or if you're using an acc_WRAPs.dat file from a previous run (either made with sieve.sh or with dracula.sh - the formats are 100% compatible).
 
-The dracula.sh routine is superior to sieve.sh in several ways:
-- The writing is simpler, more transparent, and overall the script is easier to follow. Part of this is because of the improved logic, and in particular the use of trial.tim as an intermediate file.
-- As noted before, it is automatic, very little manual intervention is needed. For each solution, the script not only changes the C PHASEN into PHASE +N statements, but it also comments out the JUMP statements around it as needed. For this, the use of the intermediate file (trial.tim) is very useful. 
-- However, the more important improvement, which is pretty fundamental, is to always prioritize the partial solutions with the lowest chi2, no matter how many gaps they connect. This means that, generally, we get to the timing solution much faster, since the partial solutions with low chi2 are statistically more likely. Indeed, if you run this script with 47TucAA.tim and 47TucAA.par, you should see the solution emerge in the 46th cycle (i.e., resulting from the processing of the 47th partial solution for which it tries to connect one extra gap), not after more than 400 tempo cycles.
+If you're continuing work from sieve.sh, please beware of the required format for the dracula timfile, where all JUMPs are uncommented and all the gap tags are commented. Then, finally, make it run!
+
+The dracula.sh routine is superior to sieve.sh, and should preferably be used:
+
+- The writing is simpler, more transparent, and overall the script is easier to follow. Part of this is because of the improved logic, and in particular the use of trial.tim as an intermediate file, and the use of the gaps.txt file as a support file.
+- As noted before, it is automatic, very little manual intervention is needed. For each solution, the script not only changes the C PHASEN into PHASE +N statements, but it also comments out the JUMP statements around it as required by the partial solution being examined. For this, the use of the intermediate file (trial.tim) is very useful. 
+- However, the more important improvement, which is pretty fundamental, is to always prioritize the partial solutions with the lowest chi2, no matter how many gaps they connect. This means that we always get to the timing solution faster (and sometimes much faster) than with sieve.sh, where we must calculate all solutions for each new gap first before moving to the next gap.
+
+Indeed, if you run this script with 47TucAA.tim and 47TucAA.par, you should see the solution emerge in the 46th cycle (i.e., resulting from the processing of the 45th partial solution for which it tries to connect one extra gap), not after more than 400 cycles.
 
 This idea was already described in Freire & Ridolfi (2018), in the last paragraph of section 4.3, the delay in the implementation has to do with the fact that only now did a really simple implementation occur to me.
 
-Some notes about dracula.sh:
-- You don't need to name all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this.
-- Note that after determining the solution, the script will keep running. This will determine whether the solution is unique or not. If it is not, then that means you need to name more gaps between TOA groups, and restart from scratch.
-- With sieve.sh, you know at which added gap you have reached a unique solution. With dracula.sh, you don't know that in advance, so by deafult you can name all the gaps in your file, except one (the one that does not have two JUMP statements around it).
-This is not a problem if connecting the whole data set does not get you outside the maximum chi2 threshold. Whether or not that happens is partly related to the next issue.
-- With sieve.sh, as you connect more and more gaps, you can see when your initial ephemeris might start to become inadequate: all solutions start having high chi2's. In such cases, you need to fit for more parameters that were not necessary in the initial stages (like, e.g., proper motion). With dracula.sh, you have to be pretty sure about the suitability of the set of parameters you're using from the start.
+Some notes about the usage of dracula.sh (and some exercises you can do with 47TucAA.tim):
+- You don't need to tag all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this. After finding the unique solution for 47 Tuc AA, you can keep connecting manually (i.e., by editing PHASE +N statements for each additional gap betwen TOA groups) in order to verify that the connection is now unambiguous for all the remaining gaps. This is important to validate the solution.
+- Note that after determining the solution, the script will keep running. This will determine whether the solution reported is unique or not. In the case of 47 Tuc AA, this is the case.
+- If it is not unique, then that means you need to tag additional gaps between TOA groups, add them in the tag list in dracula.sh, and continue the computation, using the acc_WRAPs.dat you found at the early stage (as mentioned above, the script gives you the option of continuing work from a previous set of solutions). You can also do this to check automatically that the solution you obtained, even if unique, stays in fact unique for the remainder of the gaps.
+- This means that, if you choose to do so, you can use dracula.sh as you use sieve.sh: by tagging new gaps progressively (you choose how many at a time), and calculating how many solutions are there for those gaps.
+- This flexible sieve.sh-like usage requires more mannual intervention, but it gives us a better idea of when the solution becomes unique, and will also give you an idea of whether your parameter set might become inadequate, this happens when the chi2 of all solutions, even the best ones, starts going up and up. Indeed, the longer the timing baseline, the more parameters you might need (like, for instance, the proper motion becomes necessary for multi-year data sets). 
+- This progressive usage also has the benefit that you can probe which gaps give you fewer new solutions; generally these are the shorter ones in time, or the ones that are adjacent to a group that is already partially connected. If a new gap gives you way too many solutions, don't worry: just stop the script, put its tag in some other gap, and re-start.
+- It also has another advantage: let's imagine that after you connect all your gaps, you still find that there are multiple solutions. This means that you don't have enough information to obtain a unique timing solution; which means that you need to take more data on the pulsar. If you keep those multiple solutions (they should be all that's left in acc_WRAPs.dat), then when you get the new TOAs, just name the extra gaps and test those solutions, effectively continuing the work - no need to start from scratch!
 
-Therefore, the dracula.sh script does not entirely supersede sieve.sh - both are useful tools with slightly different applications and advantages.
+
+### Usage
+
+* Download dracula.sh, 47TucAA.tim and 47TucAA.par into a directory. Edit dracula.sh, as instructed within the script itself. Make it execulable, using
+
+> chmod u+x dracula.sh
+
+and then run it:
+
+> ./dracula.sh
 
 ### Known issues
 
@@ -104,7 +122,7 @@ Therefore, the dracula.sh script does not entirely supersede sieve.sh - both are
   This can be edited easily in your tempo source code. Search for the words that appear at the end of the tempo.lis in the code, that tells you which part of the code is writing that file. Then change the precision in the writing of the reduced chi2. 
 
 * For sieve. sh there is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). 
-This issue is avoided by the use of the dracula.sh script.
+This issue is avoided by the use of the dracula.sh script, unless one chooses to use it as sieve.sh, by naming more and more gaps.
 
 * The tempo runs waste most of the time repeating many steps, like consulting the Earth rotation tables, solar system ephemerides, etc, until we get to the stage where we have the precise vectors between the telescope at the time of the TOA and the Solar System Barycentre. All of that only needs to be run once. My next step will be to use PINT to do these calculations separately.
 
