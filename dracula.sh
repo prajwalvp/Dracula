@@ -1,6 +1,6 @@
 #!/bin/sh
 
-##### (1) Entries that must be updated each time this script is run
+# Things to edit before running the script
 
 # These include the total list of phase gap identifiers used the .tim file. One could grep them from there, but the order is important.
 echo PHASE0 > gaps.txt
@@ -18,17 +18,12 @@ echo PHASEK >> gaps.txt
 echo PHASEL >> gaps.txt
 echo PHASEM >> gaps.txt
 
-
 n_gaps=`wc -l < gaps.txt`
 # add 1, because we start counters below at 1*/
 number_gaps=`expr $n_gaps + 1`
 
-##### (2) Entries that can optionally be updated each time this script is run
-
 # inner loops continue as long as chi2 is below this value
 chi2_threshold="2.0"
-
-##### (3) Entries that only need to be set at the beginning
 
 # specify version of TEMPO we're using
 # path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
@@ -52,26 +47,20 @@ timfile=47TucAA.tim
 rephem=J0024-7205AA.par
 
 # To start, you must have a acc_WRAPs.dat. If you don't, that means you're starting from scratch. In that case, just make one containing 3 zeros in a line.
-
+# Count the lines in acc_WRAPs.dat
 n=`wc -l < acc_WRAPs.dat`
 
 ##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # remove previous rundir, make new one, copy files there and start calculations there
-
 rm -rf $rundir
 mkdir $rundir
 cp gaps.txt $ephem $timfile $rundir
 cp acc_WRAPs.dat $rundir
 
-
 # go to rundir and start calculation
-
 cd $rundir
-
 start=`date`
-
-#
 touch F1_positives.dat
 
 # set the total counter for the number of tempo runs
@@ -80,16 +69,14 @@ t=0
 l=0
 # set number of solutions found
 s=0
-
 # Arbitrary positions we're sampling for finding new solutions
 z1=-5
 z2=5
 
-if [ "$n" -gt 0 ]
+while [ "$n" -gt 0 ]
       # this is the outer loop, where we cycle through the acceptable solutions.
       # We'll keep doing this until there are no partial solutions left
-then
-
+do
     # Let's now find out how many lines we want to do in a row. 1% of the lines is a good target, I think.
     # This will reduce the number of sorts by a factor k. However, it could slightly delay finding the solution.
     if [ "$n" -gt 100000 ]
@@ -243,7 +230,6 @@ then
 	then
 	    if [ "$f" -eq "1" ]
 	    then
-		
 		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
 		if [ "$i" -eq "$n_gaps" ]
 		then
@@ -257,12 +243,10 @@ then
 		    echo $acc_combination, $min : chi2 = $chi2
 		    echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 		fi
-		
 	    else
 		echo "F1 is positive to more than 2 sigma"
 		echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
 	    fi
-	    
         else
 	    echo "chi2 too large"
         fi
@@ -272,8 +256,7 @@ then
 	z=`expr $min + 1`
 	chi=1
 	while [ "$chi" -eq 1 ]
-	do
-	    
+	do 
 	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
@@ -311,8 +294,7 @@ then
 		fi
 	    else
 		echo "chi2 too large"
-	    fi
-	    
+	    fi   
 	    z=`expr $z + 1`
 	done
 	
@@ -322,7 +304,6 @@ then
 	chi=1   
 	while [ "$chi" -eq 1 ]
 	do	 
-	    
 	    sed 's/C '$ex_to_replace'/PHASE '$z'/g' trial.tim > trial_new.tim	    
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
@@ -361,10 +342,8 @@ then
 	    else
 		echo "chi2 too large"
 	    fi
-	    
 	    z=`expr $z - 1`
-	done
-	
+	done	
     done
     
     # re-make acc_WRAPs.dat for next k cycle.
@@ -386,9 +365,7 @@ then
     # Update n with number of remaining solutions
     
     n=`wc -l < acc_WRAPs.dat`
-else
-    echo "Your file acc_WRAPs.dat is empty"
-fi
+done
 
 end=`date`
 
