@@ -114,9 +114,19 @@ JUMP
 ...
 
 
-Thus, the gap tags must be commented out, and the JUMPs around it cannot be commented out. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
+Thus, the gap tags must be commented out, and the JUMPs around it cannot be commented out. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed. At the end, you must add a dummy tag, PHASE0
 
-After that, list those gap tags in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). If you're continuing work from sieve.sh, please change the timfile, as shown above. Then, finally, make it run!
+...
+
+JUMP
+
+PHASE0
+
+JUMP
+
+This is necessary for the script to start processing the first line in acc_WRAPs.dat. Because of this, all solutions (whether made by sieve.sh or dracula.sh) start with a zero.
+
+After that, list those gap tags in the dracula.sh file, with the dummy tag first, as in the example. Then, enter your TEMPO, basedir, rundir, timfile, parfile information at the top of the script (as in the sieve.sh script) and e-mail, if you want the results to be e-mailed to you. If you're continuing work from sieve.sh, please change the file with the TOAs, as shown above. Then, finally, make it run!
 
 The dracula.sh routine is superior to sieve.sh, and should preferably be used:
 
