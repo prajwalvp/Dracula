@@ -81,9 +81,42 @@ You might also find that somewhere along the way you need to start fitting an ad
 Using the previous script is a good idea if the number of possible solutions is a few thousands. If it is millions instead, then you have a problem. 
 Also, using the previous script requires some manual operation. 
 
-To do things automatically, you can use instead dracula.sh. To use this, you have to edit the tags of all the gaps between groups of TOAs in advance in your .tim file, or at least a few of them, as I did in file 47TucAA.tim - just write C PHASEA in between a pair of JUMPs. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
+To do things automatically, you can use instead dracula.sh. To use this, you have to edit the tags of all the gaps between groups of TOAs in advance in your .tim file, or at least a few of them, as I did in file 47TucAA.tim. The syntax here is slightly different than in sieve.sh. The example above is written as:
 
-After that, list those gap tags in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). If you're continuing work from sieve.sh, please beware of the required format for the dracula timfile, where all JUMPs are uncommented and all the gap tags are commented. Then, finally, make it run!
+..
+
+JUMP
+
+
+JUMP
+
+7               1390.000 51582.2548632839670   13.657                 0.00000
+
+7               1390.000 51582.3201388983131   25.329                 0.00000
+
+7               1390.000 51582.3850678691313   16.834                 0.00000
+
+JUMP
+
+C PHASEA
+
+JUMP
+
+7               1390.000 51589.2534739821375   29.849                 0.00000
+
+7               1390.000 51589.3336799053180   28.445                 0.00000
+
+JUMP
+
+
+JUMP
+
+...
+
+
+Thus, the gap tags must be commented out, and the JUMPs around it cannot be commented out. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed.
+
+After that, list those gap tags in the dracula.sh file. Then, enter your TEMPO, basedir, rundir, timfile, and parfile information at the top of the script (as in the sieve.sh script). If you're continuing work from sieve.sh, please change the timfile, as shown above. Then, finally, make it run!
 
 The dracula.sh routine is superior to sieve.sh, and should preferably be used:
 
