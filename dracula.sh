@@ -369,6 +369,8 @@ done
 
 end=`date`
 
+cd $basedir
+
 # At this stage, acc_WRAPs.dat should be empty. What we can do is to make a new one from the solution(s) found, in order to continue work
 # Either with extra gap tags in same data set, or with new ones around a new data set. 
 cat solution_*dat | awk '{print $(NF-1)" "$0}' | sort -n | cut -f2- -d' ' > acc_WRAPs.dat
