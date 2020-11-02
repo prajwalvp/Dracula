@@ -120,7 +120,7 @@ Thus, the gap tags must be commented out, and the JUMPs around it cannot be comm
 
 JUMP
 
-PHASE0
+C PHASE0
 
 JUMP
 
