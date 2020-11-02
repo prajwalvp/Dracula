@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Things to edit before running the script
+# Things to edit before running the script are indicated with *****
 
-# These include the total list of phase gap identifiers used the .tim file. One could grep them from there, but the order is important.
+# ***** These include the total list of phase gap tags used the .tim file. One could grep them from there, but the order is important.
 echo PHASE0 > gaps.txt
 echo PHASEA >> gaps.txt
 echo PHASEB >> gaps.txt
@@ -17,40 +17,56 @@ echo PHASEJ >> gaps.txt
 echo PHASEK >> gaps.txt
 echo PHASEL >> gaps.txt
 echo PHASEM >> gaps.txt
+echo PHASEN >> gaps.txt
+echo PHASEO >> gaps.txt
+echo PHASEP >> gaps.txt
+echo PHASEQ >> gaps.txt
+echo PHASER >> gaps.txt
+echo PHASES >> gaps.txt
+echo PHASET >> gaps.txt
+echo PHASEU >> gaps.txt
 
+
+# ***** Specify your chi2 threshould. Program continues while there are any partial solutions with chi2s below this level.
+chi2_threshold="2.0"
+
+# ***** specify version of TEMPO we're using
+#       a) path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
+TEMPO=/homes/pfreire/tempo_M2/tempo
+#       b) path to tempo executable
+alias tempo=$TEMPO/tempo_m2
+
+# ***** Specify where we are--this is the directory where we want to write our results.
+#       Default the directory where script is. This directory must contain the ephemeris, TOA list and acc_WRAPs.dat
+basedir=$PWD
+
+# ***** Specify where we want to run this (Shared memory  - /dev/shm/something - saves your disk and tons of time)
+rundir=/dev/shm/AA
+
+# ***** Specify the files we are going to work with
+#       (.par and .tim file names--these files should be in your basedir) - DON'T name it "trial.tim"
+#       Examples given of TOA file and initial ephemeris are given in this repository
+ephem=47TucAA.par
+timfile=47TucAA.tim
+
+# ***** Name the resulting ephemeris (the top of the previous ephem file, plus .par)
+rephem=J0024-7205AA.par
+
+# ***** Finally: Edit your mail address here (please change this, otherwise I'll be getting e-mails with your solutions)
+address=pfreire@mpifr-bonn.mpg.de
+
+# ***** WARNING: To start, you must have a acc_WRAPs.dat. If you don't, that means you're starting from scratch. In that case, just make one containing 3 zeros in a line.
+
+
+##########################  YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE  ########################## 
+
+# set number of gaps
 n_gaps=`wc -l < gaps.txt`
 # add 1, because we start counters below at 1*/
 number_gaps=`expr $n_gaps + 1`
 
-# inner loops continue as long as chi2 is below this value
-chi2_threshold="2.0"
-
-# specify version of TEMPO we're using
-# path to $TEMPO directory, which contains tempo.cfg, obsys.dat, etc.
-TEMPO=/homes/pfreire/tempo_M2/tempo
-# path to tempo executable
-alias tempo=$TEMPO/tempo_m2
-
-# specify where we are--this is the directory where we want to write our results.
-# Default the directory where script is. This directory must contain the ephemeris, TOA list and acc_WRAPs.dat
-basedir=$PWD
-
-# specify where we want to run this (RAM disk, like '/dev/shm/timing/')
-rundir=/dev/shm/AA
-
-# specify the files we are going to work with
-# (.par and .tim file names--these files should be in your basedir) - DON'T name it "trial.tim"
-# Examples given of TOA file and initial ephemeris are given in this repository
-ephem=47TucAA.par
-timfile=47TucAA.tim
-# Name the resulting ephemeris (the top of the previous ephem file, plus .par)
-rephem=J0024-7205AA.par
-
-# To start, you must have a acc_WRAPs.dat. If you don't, that means you're starting from scratch. In that case, just make one containing 3 zeros in a line.
 # Count the lines in acc_WRAPs.dat
 n=`wc -l < acc_WRAPs.dat`
-
-##### YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE
 
 # remove previous rundir, make new one, copy files there and start calculations there
 rm -rf $rundir
@@ -236,7 +252,7 @@ do
 		    echo $acc_combination $min $chi2 $chi2_prev > $basedir/solution_$l.$min.dat
 		    cp $rephem $basedir/solution_$l.$min.par
 		    # Let user know a solution has been found
-		    echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+		    cat $rephem | mail -s "Solution found" $address
 		    s=`expr $s + 1`
 		else
 		    # If number of connections is smaller, then just write solution to WRAPs.dat
@@ -280,7 +296,7 @@ do
 			echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
 			cp $rephem $basedir/solution_$l.$z.par
 			# Let user know a solution has been found
-			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+			cat $rephem | mail -s "Solution found" $address
 			s=`expr $s + 1`
 		    else
 			# If number of connections is smaller, then just write solution to WRAPs.dat
@@ -327,7 +343,7 @@ do
 			echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
 			cp $rephem $basedir/solution_$l.$z.par
 			# Let user know a solution has been found
-			echo "" | mail -s "Solution found" pfreire@mpifr-bonn.mpg.de -A $rephem
+			cat $rephem | mail -s "Solution found" $address
 			s=`expr $s + 1`
 		    else
 			# If number of connections is smaller, then just write solution to WRAPs.dat
