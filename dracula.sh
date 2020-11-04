@@ -17,15 +17,6 @@ echo PHASEJ >> gaps.txt
 echo PHASEK >> gaps.txt
 echo PHASEL >> gaps.txt
 echo PHASEM >> gaps.txt
-echo PHASEN >> gaps.txt
-echo PHASEO >> gaps.txt
-echo PHASEP >> gaps.txt
-echo PHASEQ >> gaps.txt
-echo PHASER >> gaps.txt
-echo PHASES >> gaps.txt
-echo PHASET >> gaps.txt
-echo PHASEU >> gaps.txt
-
 
 # ***** Specify your chi2 threshould. Program continues while there are any partial solutions with chi2s below this level.
 chi2_threshold="2.0"
