@@ -18,7 +18,7 @@ echo PHASEK >> gaps.txt
 echo PHASEL >> gaps.txt
 echo PHASEM >> gaps.txt
 
-# ***** Specify your chi2 threshould. Program continues while there are any partial solutions with chi2s below this level.
+# ***** Specify your chi2 threshold. Program continues while there are any partial solutions with chi2s below this level.
 chi2_threshold="2.0"
 
 # ***** specify version of TEMPO we're using
@@ -46,8 +46,8 @@ rephem=J0024-7205AA.par
 # ***** Finally: Edit your mail address here (please change this, otherwise I'll be getting e-mails with your solutions)
 address=pfreire@mpifr-bonn.mpg.de
 
-# ***** WARNING: To start, you must have a acc_WRAPs.dat. If you don't, that means you're starting from scratch. In that case, just make one containing 3 zeros in a line.
-
+# ***** WARNING: To start, you must have a file called acc_WRAPs.dat. If you don't, that means you're starting from scratch.
+#                In that case, just make one containing 3 zeros in a line.
 
 ##########################  YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE  ########################## 
 
