@@ -224,10 +224,6 @@ do
         tempo trial_new.tim -f $ephem -w > /dev/null 
 	t=`expr $t + 1`
         chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	# check whether the F1 is negative to more than 2 sigma
-	# f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-	# Line commented out, because we are in a GC
-	f=1
 	
 	# Comparison between two real numbers
 	chi=`echo $chi2' < '$chi2_threshold | bc -l`
@@ -235,24 +231,19 @@ do
 	# If chi2 is smaller than threshold, write to WRAPs.dat
 	if [ "$chi" -eq "1" ]
 	then
-	    if [ "$f" -eq "1" ]
+	    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+	    if [ "$i" -eq "$n_gaps" ]
 	    then
-		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
-		if [ "$i" -eq "$n_gaps" ]
-		then
-		    echo $acc_combination $min $chi2 $chi2_prev > $basedir/solution_$l.$min.dat
-		    cp $rephem $basedir/solution_$l.$min.par
-		    # Let user know a solution has been found
-		    cat $rephem | mail -s "Solution found" $address
-		    s=`expr $s + 1`
-		else
-		    # If number of connections is smaller, then just write solution to WRAPs.dat
-		    echo $acc_combination, $min : chi2 = $chi2
-		    echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
-		fi
+		echo Full solution found! $acc_combination, $min : chi2 = $chi2
+		echo $acc_combination $min $chi2 $chi2_prev > $basedir/solution_$l.$min.dat
+		cp $rephem $basedir/solution_$l.$min.par
+		# Let user know a solution has been found
+		cat $rephem | mail -s "Solution found" $address
+		s=`expr $s + 1`
 	    else
-		echo "F1 is positive to more than 2 sigma"
-		echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
+		# If number of connections is smaller, then just write solution to WRAPs.dat
+		echo Found $acc_combination, $min : chi2 = $chi2
+		echo $acc_combination $min $chi2 $chi2_prev >> WRAPs.dat
 	    fi
         else
 	    echo "chi2 too large"
@@ -268,10 +259,6 @@ do
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
 	    chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	    # check whether the F1 is negative to more than 2 sigma
-	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-	    # Line commented out, because we are in a GC
-	    f=1
 	    
 	    # comparison between two real numbers
 	    chi=`echo $chi2' < '$chi2_threshold | bc -l` 
@@ -279,26 +266,20 @@ do
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
 	    if [ "$chi" -eq "1" ]
 	    then
-		if [ "$f" -eq "1" ]
+		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+		if [ "$i" -eq "$n_gaps" ]
 		then
-		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
-		    if [ "$i" -eq "$n_gaps" ]
-		    then
-			echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
-			cp $rephem $basedir/solution_$l.$z.par
-			# Let user know a solution has been found
-			cat $rephem | mail -s "Solution found" $address
-			s=`expr $s + 1`
-		    else
-			# If number of connections is smaller, then just write solution to WRAPs.dat
-			echo $acc_combination, $z : chi2 = $chi2
-			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-		    fi			
-		    
+		    echo Full solution found! $acc_combination, $z : chi2 = $chi2
+		    echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
+		    cp $rephem $basedir/solution_$l.$z.par
+		    # Let user know a solution has been found
+		    cat $rephem | mail -s "Solution found" $address
+		    s=`expr $s + 1`
 		else
-		    echo "F1 is positive to more than 2 sigma"
-		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat;
-		fi
+		    # If number of connections is smaller, then just write solution to WRAPs.dat
+		    echo Found $acc_combination, $z : chi2 = $chi2
+		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
+		fi			
 	    else
 		echo "chi2 too large"
 	    fi   
@@ -315,10 +296,6 @@ do
 	    tempo trial_new.tim -f $ephem -w > /dev/null
 	    t=`expr $t + 1`
 	    chi2=`cat tempo.lis | tail -1 | awk -F= '{print $2}' | awk '{print $1}'`
-	    # check whether the F1 is negative to more than 2 sigma
-	    # f=`grep F1 $rephem | awk '{print $2"/"$4" < 2.0"}' | bc -l`
-	    # Line commented out, because we are in a GC
-	    f=1
 	    
 	    # Comparison between two real numbers
 	    chi=`echo $chi2' < '$chi2_threshold | bc -l`
@@ -326,26 +303,20 @@ do
 	    # If chi2 is smaller than threshold, write to WRAPs.dat
 	    if [ "$chi" -eq "1" ]
 	    then
-		if [ "$f" -eq "1" ]
+		# If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
+		if [ "$i" -eq "$n_gaps" ]
 		then
-		    # If the number of gaps connected by new solution is the same as the number of gaps, then notify user of the solution
-		    if [ "$i" -eq "$n_gaps" ]
-		    then
-			echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
-			cp $rephem $basedir/solution_$l.$z.par
-			# Let user know a solution has been found
-			cat $rephem | mail -s "Solution found" $address
-			s=`expr $s + 1`
-		    else
-			# If number of connections is smaller, then just write solution to WRAPs.dat
-			echo $acc_combination, $z : chi2 = $chi2
-			echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
-		    fi			
-		    
+		    echo Full solution found! $acc_combination, $z : chi2 = $chi2
+		    echo $acc_combination $z $chi2 $chi2_prev > $basedir/solution_$l.$z.dat
+		    cp $rephem $basedir/solution_$l.$z.par
+		    # Let user know a solution has been found
+		    cat $rephem | mail -s "Solution found" $address
+		    s=`expr $s + 1`
 		else
-		    echo "F1 is positive to more than 2 sigma"
-		    echo $acc_combination $z $chi2 $chi2_prev >> F1_positives.dat
-		fi
+		    # If number of connections is smaller, then just write solution to WRAPs.dat
+		    echo Found $acc_combination, $z : chi2 = $chi2
+		    echo $acc_combination $z $chi2 $chi2_prev >> WRAPs.dat
+		fi			
 	    else
 		echo "chi2 too large"
 	    fi
