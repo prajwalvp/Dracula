@@ -68,7 +68,6 @@ cp acc_WRAPs.dat $rundir
 # go to rundir and start calculation
 cd $rundir
 start=`date`
-touch F1_positives.dat
 
 # set the total counter for the number of tempo runs
 t=0
@@ -358,7 +357,7 @@ cat solution_*dat | awk '{print $(NF-1)" "$0}' | sort -n | cut -f2- -d' ' > acc_
 echo Made a total of $t trials
 echo Of those, a total of $l unique solutions had reduced chi2s smaller than $chi2_threshold,
 echo  which for that were stored and processed further.
-echo Found $s solution
+echo Found $s solutions
 echo Started $start
 echo Ended $end
 
