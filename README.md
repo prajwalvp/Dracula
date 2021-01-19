@@ -17,7 +17,11 @@ Major updates
 
 - Oct. 31: improved description, functionality, added "usage" below.
 
+- Jan. 19 2021: changed gap names from JUMPX to GAPX. This allows automatic building of list of gap names from TOA list, without needing to specify it independently in the script.
+
 ### Instructions (which assume familiarity with TEMPO)
+
+Preparation:
 
 You should have an initial ephemeris (parfile) and set of TOAs (timfile). Place JUMPs around every epoch (each comprising of a group of TOAs) except one. If your initial parfile is reasonable, you should be able to run TEMPO on this and get pretty flat residuals.
 
@@ -98,7 +102,7 @@ JUMP
 
 JUMP
 
-C PHASEA
+C GAPA
 
 JUMP
 
@@ -114,30 +118,31 @@ JUMP
 ...
 
 
-Thus, the gap tags must be commented out, and the JUMPs around it cannot be commented out. Note that the JUMP statements around each PHASE statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed. At the end, you must add a dummy tag, PHASE0
+Thus, the gap tags must be commented out, and the JUMPs around it cannot be commented out. Note that the JUMP statements around each GAP statement should be offset by two lines, because that is what the dracula.sh script assumes, so that it can comment them out properly when needed. At the end, you must add a dummy tag, GAP0
 
 ...
 
 JUMP
 
-C PHASE0
+C GAP0
 
 JUMP
 
 This is necessary for the script to start processing the first line in acc_WRAPs.dat. Because of this, all solutions (whether made by sieve.sh or dracula.sh) start with a zero.
 
-After that, list those gap tags in the dracula.sh file, with the dummy tag first, as in the example. Then, enter your TEMPO, basedir, rundir, timfile, parfile information at the top of the script (as in the sieve.sh script) and e-mail, if you want the results to be e-mailed to you. If you're continuing work from sieve.sh, please change the file with the TOAs, as shown above. Then, finally, make it run!
+After that, enter your TEMPO, basedir, rundir, timfile, parfile information at the top of the script (as in the sieve.sh script) and e-mail, if you want the solutions to be e-mailed to you and not to me. If you're continuing work from sieve.sh, please change the file with the TOAs, as shown above. Then, finally, make it run, by simply calling the script!
 
 The dracula.sh routine is superior to sieve.sh, and should preferably be used:
 
 - The writing is simpler, more transparent, and overall the script is easier to follow. Part of this is because of the improved logic, and in particular the use of trial.tim as an intermediate file, and the use of the gaps.txt file as a support file.
-- As noted before, it is automatic, very little manual intervention is needed. For each solution, the script not only changes the C PHASEN into PHASE +N statements, but it also comments out the JUMP statements around it as required by the partial solution being examined. For this, the use of the intermediate file (trial.tim) is very useful. 
+- As noted before, it is automatic, very little manual intervention is needed. For each solution, the script not only changes the C GAPX into PHASE +N statements, but it also comments out the JUMP statements around it as required by the partial solution being examined. For this, the use of the intermediate file (trial.tim) is very useful. 
 - However, the more important improvement, which is pretty fundamental, is to always prioritize the partial solutions with the lowest chi2, no matter how many gaps they connect. This means that we always get to the timing solution faster (and sometimes much faster) than with sieve.sh, where we must calculate all solutions for each new gap first before moving to the next gap.
 
 Indeed, if you run this script with 47TucAA.tim and 47TucAA.par, you should see the solution emerge in the 46th cycle (i.e., resulting from the processing of the 45th partial solution for which it tries to connect one extra gap), not after more than 400 cycles.
 
 Some notes about the usage of dracula.sh (and some exercises you can do with 47TucAA.tim):
-- The idea was already described in Freire & Ridolfi (2018), in the last paragraph of section 4.3, the delay in the implementation has to do with the fact that only now did a really simple implementation occur to me.
+
+- The improvement of dracula relative to sieve.sh was already described in Freire & Ridolfi (2018), in the last paragraph of section 4.3, the delay in the implementation has to do with the fact that only now did a really simple implementation occur to me.
 - You don't need to tag all the gaps between TOAs in advance, just enough that you think you might get a unique solution. The file 47TucAA.tim is an example of this. After finding the unique solution for 47 Tuc AA, you can keep connecting manually (i.e., by editing PHASE +N statements for each additional gap betwen TOA groups) in order to verify that the connection is now unambiguous for all the remaining gaps, and chek whether it stays within your chi2 limit or not - and if not, whether fitting any additional parameters helps.
 
   NOTE: If you use the post-fit solution(s) that appears in $basedir with the name solution_n.m.par (where n and m are integers) for this manual work, then all previous gap tags and JUMP statements around them have to be deleted (or commented out), because those rotation numbers are already taken into account by solution_n.m.par. One of the advantages of this is that if you set NITS to 1 in that solution, you can see the pre-fit residuals for all TOAs. This gives you a good idea of how good that solution really is at predicting TOAs. Also, starting from this solution results in much smaller PHASE numbers for all remaining gaps. In the case of 47TucAA.tim, those should all be 0.
@@ -167,7 +172,7 @@ and then run it:
 * For sieve. sh there is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). 
 This issue is avoided by the use of the dracula.sh script, unless one chooses to use it as sieve.sh, by naming more and more gaps.
 
-* The tempo runs waste most of the time repeating many steps, like consulting the Earth rotation tables, solar system ephemerides, etc, until we get to the stage where we have the precise vectors between the telescope at the time of the TOA and the Solar System Barycentre. All of that only needs to be run once. My next step will be to use PINT to do these calculations separately.
+* The tempo runs waste most of the time repeating many steps, like consulting the Earth rotation tables, solar system ephemerides, etc, until we get to the stage where we have the precise vectors between the telescope at the time of the TOA and the Solar System Barycentre. All of that only needs to be run once. My next step will be to use PINT to do these calculations separately, or find a way of making reliable barycentric TOAs, and work with those.
 
 * (Erik Madsen): Personally, I'd have written it in Python, but to each their own!
 (Paulo Freire): why use python when very simple shell commands do so well??
