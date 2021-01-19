@@ -2,22 +2,6 @@
 
 # Things to edit before running the script are indicated with *****
 
-# ***** These include the total list of phase gap tags used the .tim file. One could grep them from there, but the order is important.
-echo PHASE0 > gaps.txt
-echo PHASEA >> gaps.txt
-echo PHASEB >> gaps.txt
-echo PHASEC >> gaps.txt
-echo PHASED >> gaps.txt
-echo PHASEE >> gaps.txt
-echo PHASEF >> gaps.txt
-echo PHASEG >> gaps.txt
-echo PHASEH >> gaps.txt
-echo PHASEI >> gaps.txt
-echo PHASEJ >> gaps.txt
-echo PHASEK >> gaps.txt
-echo PHASEL >> gaps.txt
-echo PHASEM >> gaps.txt
-
 # ***** Specify your chi2 threshold. Program continues while there are any partial solutions with chi2s below this level.
 chi2_threshold="2.0"
 
@@ -50,6 +34,9 @@ address=pfreire@mpifr-bonn.mpg.de
 #                In that case, just make one containing 3 zeros in a line.
 
 ##########################  YOU SHOULD NOT NEED TO EDIT BEYOND THIS LINE  ########################## 
+
+# Make sorted file with list of gaps
+grep GAP $timfile | awk '{print $2}' | sort > gaps.txt
 
 # set number of gaps
 n_gaps=`wc -l < gaps.txt`
