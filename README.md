@@ -19,6 +19,8 @@ Major updates
 
 - Jan. 19 2021: changed gap names from JUMPX to GAPX. This allows automatic building of list of gap names from TOA list, without needing to specify it independently in the script.
 
+- March 2 2021: Added list of published pulsars that have been connected using this software (see at the end).
+
 ### Instructions (which assume familiarity with TEMPO)
 
 Preparation:
@@ -178,4 +180,12 @@ This issue is avoided by the use of the dracula.sh script, unless one chooses to
 * (Erik Madsen): Personally, I'd have written it in Python, but to each their own!
 (Paulo Freire): why use python when very simple shell commands do so well??
  
+### Pulsars that have been connected with software from this page (in refereed literature, more unpublished):
 
+- PSR J0024-7205aa (Freire & Ridolfi 2018, MNRAS, 476, 4794)
+- PSR J0732+2314 (Martinez et al. 2019, ApJ, 881, 166)
+- PSRs J1906+0454, J1921+1929, J1928+1245, J1930+2441 and J1932+1756. PSR J1921+1929 is a gamma-ray MSP (Parent et al. 2019, ApJ, 886, 148)
+- New pulsars presented by Cameron et al. (2020, MNRAS, 493, 1063)
+- New FAST pulsars timed at Parkes, presented by cameron et al. (2020, MNRAS, 495, 3515)
+- PSRs J1805+0615, J1824+1014, J1908+2105, J2006+0148 and J2052+1219, all of them gamma-ray MSPs (Deneva et al. 2021, ApJ, 909, 6)
+- PSR J1536-4948, a gamma-ray MSP (Bhattacharyya et al. 2021, accepted for publication in ApJ, arXiv: 2102:04026v1)
