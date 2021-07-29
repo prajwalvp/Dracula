@@ -174,15 +174,23 @@ and then run it:
 
   This can be edited easily in your tempo source code. In a file called newval.f, there is a sequence of lines that read:
   
+  
 1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.9,
+
 1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.9,
+
 1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.9,
+
 
 Replace these with:
 
+
 1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.4,
+
 1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.4,
+
 1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.4,
+
 
 and compile tempo.
   
