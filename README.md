@@ -21,6 +21,8 @@ Major updates
 
 - March 2 2021: Added list of published pulsars that have been connected using this software (see at the end).
 
+- July 29 2021: By popular request, post TEMPO patch that allows it to print very large values of reduced chi2
+
 ### Instructions (which assume familiarity with TEMPO)
 
 Preparation:
@@ -170,7 +172,20 @@ and then run it:
 
 * chi2 can start to blow up to the point where tempo.lis just writes it as a bunch of asterisks, and this confuses the parsing of tempo.lis into sticking your directory listing into WRAPs.dat.
 
-  This can be edited easily in your tempo source code. Search for the words that appear at the end of the tempo.lis in the code, that tells you which part of the code is writing that file. Then change the precision in the writing of the reduced chi2. 
+  This can be edited easily in your tempo source code. In a file called newval.f, there is a sequence of lines that read:
+  
+1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.9,
+1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.9,
+1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.9,
+
+Replace these with:
+
+1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.4,
+1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.4,
+1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.4,
+
+and compile tempo.
+  
 
 * For sieve. sh there is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). 
 This issue is avoided by the use of the dracula.sh script, unless one chooses to use it as sieve.sh, by naming more and more gaps.
