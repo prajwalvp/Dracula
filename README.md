@@ -21,7 +21,7 @@ Major updates
 
 - March 2 2021: Added list of published pulsars that have been connected using this software (see at the end).
 
-- July 29 2021: By popular request, post TEMPO patch that allows it to print very large values of reduced chi2
+- July 29 2021: By popular request, I posted TEMPO patch that allows it to print very large values of reduced chi2 (see below in 'known issues'). IMPORTANT: YOU NEED TO DO THIS CHANGE IN ORDER FOR THE EXAMPLE BELOW TO WORK!
 
 ### Instructions (which assume familiarity with TEMPO)
 
