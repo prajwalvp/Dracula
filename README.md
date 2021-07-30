@@ -175,14 +175,14 @@ and then run it:
   This can be edited easily in your tempo source code. In a file called newval.f, there is a sequence of lines that read:
   
   
-1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.9,
+  1108	  format(' Chisqr/nfree: ',f9.2,'/',i5,' = ',f15.9,
 
-1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.9,
+  1109	  format(' Chisqr/nfree: ',f10.2,'/',i5,' = ',f15.9,
 
-1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.9,
+  1110	  format(' Chisqr/nfree: ',f11.2,'/',i5,' = ',f15.9,
 
 
-Replace the f15.9 with f15.4, and compile tempo. We don't need a very high precision in the chi2, but we need to printe very large values.
+  Replace the f15.9 with f15.4, and compile tempo. We don't need a very high precision in the chi2, but we need to be able to print very large values.
   
 
 * For sieve. sh there is some manual intervention in this process (editing in the PHASEA, PHASEB,... statements in the TOA list, editing the labels in sieve.sh). 
