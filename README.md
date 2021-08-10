@@ -202,3 +202,4 @@ This issue is avoided by the use of the dracula.sh script, unless one chooses to
 - New FAST pulsars timed at Parkes, presented by Cameron et al. (2020, MNRAS, 495, 3515)
 - PSRs J1805+0615, J1824+1014, J1908+2105, J2006+0148 and J2052+1219, all of them gamma-ray MSPs (Deneva et al. 2021, ApJ, 909, 6)
 - PSR J1536-4948, a gamma-ray MSP (Bhattacharyya et al. 2021, accepted for publication in ApJ, arXiv: 2102:04026v1)
+- PSRs J0921-5202, J1146-6610 and J1546-5925. The latter was already solved with the automatic dracula.sh script (Lorimer et al. 2021, arXiv:2108.03946)
