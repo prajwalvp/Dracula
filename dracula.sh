@@ -345,6 +345,7 @@ echo Made a total of $t trials
 echo Of those, a total of $l unique solutions had reduced chi2s smaller than $chi2_threshold,
 echo  which for that were stored and processed further.
 echo Found $s solutions
+echo WARNING: IF THE NUMBER OF SOLUTIONS IS ZERO, YOU HAVE TO RE-MAKE YOUR acc_WRAPs.dat FILE!
 echo Started $start
 echo Ended $end
 
