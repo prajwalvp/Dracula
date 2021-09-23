@@ -91,6 +91,7 @@ You might also find that somewhere along the way you need to start fitting an ad
 Using the previous script is a good idea if the number of possible solutions is a few thousands. If it is millions instead, then you have a problem. 
 Also, using the previous script requires some manual operation. 
 
+
 To do things automatically, you can use instead dracula.sh. To use this, you have to edit the tags of all the gaps between groups of TOAs in advance in your .tim file, or at least a few of them, as I did in file 47TucAA.tim. The syntax here is slightly different than in sieve.sh. The example above is written as:
 
 ..
@@ -134,9 +135,13 @@ C GAP0
 
 JUMP
 
-This is necessary for the script to start processing the first line in acc_WRAPs.dat. Because of this, all solutions (whether made by sieve.sh or dracula.sh) start with a zero.
+This is necessary for the script to start processing the first line in acc_WRAPs.dat, WHICH YOU MUST HAVE, otherwise the scripts does not start. If you don't have a previous acc_WRAPs.dat file, just make one with three zeros separated by spaces. If you use zero as the first number, all solutions (whether made by sieve.sh or dracula.sh) will start with a zero.
 
-After that, enter your TEMPO, basedir, rundir, timfile, parfile information at the top of the script (as in the sieve.sh script) and e-mail, if you want the solutions to be e-mailed to you and not to me. If you're continuing work from sieve.sh, please change the file with the TOAs, as shown above. Then, finally, make it run, by simply calling the script! The timing solution(s) will appear in your base working directory as solution_n.m.par, where n and m are two unique integers that tell you in which cycle was the solution found.
+IMPORTANT: as in sieve.sh, it is important that at least one TOA is outside the JUMP statements. This acts a phase reference for the fit, which won't be stable if you don't have at least one TOA outside the groups bracketed with JUMPs (which are the ones you can connect). This can be a face TOA, or a copy of the first or last TOAs.
+
+After that, enter your TEMPO, basedir, rundir, timfile, parfile information at the top of the script (as in the sieve.sh script) and e-mail, if you want the solutions to be e-mailed to you and not to me. If you're continuing work from sieve.sh, please change the file with the TOAs, as shown above.
+
+Then, finally, make it run, by simply calling the script! The timing solution(s) will appear in your base working directory as solution_n.m.par, where n and m are two unique integers that tell you in which cycle was the solution found.
 
 The dracula.sh routine is superior to sieve.sh, and should preferably be used:
 
