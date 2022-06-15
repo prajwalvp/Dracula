@@ -218,10 +218,10 @@ def add_jumps_and_shuffle_gaps(input_file):
 if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option('--input_tim', type=str, help = 'Input tim filename to make it  Dracula compatible', dest='input_tim')
-    parser.add_option('--output_tim', type=str, help = 'Output tim filename ready for Dracula run', dest='output_tim', default='dracula_ready.tim')
-    parser.add_option('--add_efac', type=str, help = 'Add EFAC value to tim file', dest='efac', default='0')
-    parser.add_option('--optimise', type=int, help = 'Choose either 0,1,2.\n 0. No optimisation, put gaps sequentially \n 1. Shuffle the gaps such that closer spaced gaps are phase connected first  \n 2. Add gaps back and forth about reference epoch', dest='optimise', default=0)
-    parser.add_option('--line_number', type=int, help = 'Line number of input tim to use as reference epoch to jump to', dest='line_number', default=1)
+    parser.add_option('--output_tim', type=str, help = 'Output tim filename ready for Dracula run (Default: dracula_ready.tim)', dest='output_tim', default='dracula_ready.tim')
+    parser.add_option('--add_efac', type=str, help = 'Add EFAC value to tim file (Default: No EFAC will be added)', dest='efac', default='0')
+    parser.add_option('--optimise', type=int, help = 'Choose either 0,1,2.\n 0. No optimisation, put gaps sequentially \n 1. Shuffle the gaps such that closer spaced gaps are phase connected first  \n 2. Add gaps back and forth about reference epoch   (Default 0)', dest='optimise', default=0)
+    parser.add_option('--line_number', type=int, help = 'Line number of input tim to use as reference epoch to jump to (Default 1)', dest='line_number', default=1)
     opts, args = parser.parse_args()
 
     # Create a copy of the original tim file
@@ -249,7 +249,8 @@ if __name__ == "__main__":
         print("Adding jumps. Gaps will be back and forth around the closest spaced epoch")
         #subprocess.check_call("cat {}".format(opts.output_tim), shell=True)
         add_jumps_and_gaps_from_ref(opts.output_tim)
-
+    else:
+        raise Exception("Invalid option. Choose either 0,1 or 2")
 
     # Add Mode and first Jump to file
     if opts.efac=='0':
