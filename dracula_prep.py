@@ -17,7 +17,7 @@ def line_prepender(input_file, line):
         f.seek(0, 0)
         f.write(line.rstrip('\r\n') + '\n' + content)
 
-def get_output_list(ref_ind, no_of_gaps):
+def back_and_forth_list(ref_ind, no_of_gaps):
    """
    Generate gap list based on reference index starting point and going sequentially on either side
    """
@@ -85,7 +85,7 @@ def get_output_list(ref_ind, no_of_gaps):
 
    return new_seq
 
-def add_jumps_and_gaps_from_ref(input_file):
+def add_jumps_and_gaps_from_ref(input_file, opts):
     """
     After jumps, add gaps back and forth about a reference point selected based on closest spaced epochs
     """ 
@@ -116,7 +116,11 @@ def add_jumps_and_gaps_from_ref(input_file):
     no_of_gaps = len(index_gaps)
    
     # Generate necessary sequence from reference
-    new_seq = get_output_list(ref_ind, no_of_gaps)       
+    if opts.optimise==2: 
+        new_seq = back_and_forth_list(ref_ind, no_of_gaps)       
+    elif opts.optimise==3:
+        new_seq = gap_trotter(ref_ind, no_of_gaps, day_gaps)       
+    
 
     gap_cnt=0
     for i, line in enumerate(data):
@@ -164,6 +168,49 @@ def add_jumps_and_gaps_unshuffled(input_file):
     contents = "".join(data)
     f.write(contents)
     f.close()
+
+    
+def gap_trotter(ref_ind, no_of_gaps, day_gaps):
+    """
+    Find path of shortest gaps from reference
+    """ 
+    r_caps = all_caps[:no_of_gaps]  
+    new_seq = list(r_caps)
+   
+    # Fill reference point in new sequence array
+    new_seq[ref_ind] = r_caps[0]  
+    ref_cnt=1
+    ptr=1
+    sign=1
+
+    # Now start inserting gaps going middle out by selecting closer spaced gaps first
+    j = ref_ind-1
+    k = ref_ind+1
+    while True:
+        if j==0:
+            #loop through gaps in other direction
+            while k < len(day_gaps):
+                new_seq[k] = r_caps[ptr]
+                ptr+=1
+                k+=1
+            break
+        if k==len(day_gaps):
+            # loop in other direction
+            while j > -1:
+                new_seq[j] = r_caps[ptr]
+                ptr+=1
+                j-=1
+            break
+        if day_gaps[j] < day_gaps[k]:
+            new_seq[j] = r_caps[ptr]
+            j-=1
+            ptr+=1
+        elif day_gaps[j] > day_gaps[k]:
+            new_seq[k] = r_caps[ptr]
+            k+=1
+            ptr+=1 
+    return new_seq            
+
 
 def add_jumps_and_shuffle_gaps(input_file):
     """
@@ -220,7 +267,7 @@ if __name__ == "__main__":
     parser.add_option('--input_tim', type=str, help = 'Input tim filename to make it  Dracula compatible', dest='input_tim')
     parser.add_option('--output_tim', type=str, help = 'Output tim filename ready for Dracula run (Default: dracula_ready.tim)', dest='output_tim', default='dracula_ready.tim')
     parser.add_option('--add_efac', type=str, help = 'Add EFAC value to tim file (Default: No EFAC will be added)', dest='efac', default='0')
-    parser.add_option('--optimise', type=int, help = 'Choose either 0,1,2.\n 0. No optimisation, put gaps sequentially \n 1. Shuffle the gaps such that closer spaced gaps are phase connected first  \n 2. Add gaps back and forth about reference epoch   (Default 0)', dest='optimise', default=0)
+    parser.add_option('--optimise', type=int, help = 'Choose either 0,1,2,3.\n 0. No optimisation, put gaps sequentially \n 1. Shuffle the gaps such that closer spaced gaps are phase connected first  \n 2. Add gaps back and forth about reference epoch  3. Add gaps by finding the least gap path from reference   (Default 0)', dest='optimise', default=0)
     parser.add_option('--line_number', type=int, help = 'Line number of input tim to use as reference epoch to jump to (Default 1)', dest='line_number', default=1)
     opts, args = parser.parse_args()
 
@@ -245,12 +292,15 @@ if __name__ == "__main__":
         print("Adding jumps and inserting gaps in ascending order of close spaced epochs....")
         #subprocess.check_call("cat {}".format(opts.output_tim), shell=True)
         add_jumps_and_shuffle_gaps(opts.output_tim)
-    elif opts.optimise==2:
-        print("Adding jumps. Gaps will be back and forth around the closest spaced epoch")
+    elif opts.optimise==2 or opts.optimise==3:
+        if opts.optimise==2:
+            print("Adding jumps. Gaps will be added back and forth from reference epoch")
+        else:
+            print("Adding jumps. Gaps will be added from reference finding the least gap path")
         #subprocess.check_call("cat {}".format(opts.output_tim), shell=True)
-        add_jumps_and_gaps_from_ref(opts.output_tim)
+        add_jumps_and_gaps_from_ref(opts.output_tim, opts)
     else:
-        raise Exception("Invalid option. Choose either 0,1 or 2")
+        raise Exception("Invalid optimise option. Choose either 0,1 or 2")
 
     # Add Mode and first Jump to file
     if opts.efac=='0':
